@@ -20,121 +20,106 @@
         <color rgba="0 0 0 1" />
     </material>
 
-    <xacro:property name="biped_waist_height" value="0.75" />
-
     <link name="base_link">
     </link>
 
-    <link name="l_pelvis_yaw_link">
-    </link>
+    <xacro:macro name="biped_leg" params="parent_link prefix reflect">
+        <link name="${prefix}_pelvis_yaw_link">
+        </link>
 
-    <link name="l_pelvis_roll_link">
-    </link>
+        <link name="${prefix}_pelvis_roll_link">
+        </link>
 
-    <link name="l_pelvis_pitch_link">
-    </link>
+        <link name="${prefix}_pelvis_pitch_link">
+            <visual>
+                <origin xyz="0 0 -0.20"/>
+                <geometry>
+                    <cylinder radius="0.02" length="0.5" />
+                </geometry>
+                <material name="blue"/>
+            </visual>
+        </link>
 
-    <joint name="l_pelvis_yaw" type="revolute">
-        <axis xyz="0 0 1" />
-        <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-        <origin xyz="0 -0.25 0" rpy="0 0 0" />
-        <parent link="base_link" />
-        <child link="l_pelvis_yaw_link" />
-    </joint>
+        <joint name="${prefix}_pelvis_yaw" type="revolute">
+            <axis xyz="0 0 1" />
+            <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
+            <origin xyz="0 ${reflect*0.25} 0" rpy="0 0 0" />
+            <parent link="${parent_link}" />
+            <child link="${prefix}_pelvis_yaw_link" />
+        </joint>
 
-    <joint name="l_pelvis_roll" type="revolute">
-        <axis xyz="1 0 0" />
-        <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="l_pelvis_yaw_link" />
-        <child link="l_pelvis_roll_link" />
-    </joint>
+        <joint name="${prefix}_pelvis_roll" type="revolute">
+            <axis xyz="1 0 0" />
+            <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <parent link="${prefix}_pelvis_yaw_link" />
+            <child link="${prefix}_pelvis_roll_link" />
+        </joint>
 
-    <joint name="l_pelvis_pitch" type="revolute">
-        <axis xyz="0 1 0" />
-        <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="l_pelvis_roll_link" />
-        <child link="l_pelvis_pitch_link" />
-    </joint>
+        <joint name="${prefix}_pelvis_pitch" type="revolute">
+            <axis xyz="0 1 0" />
+            <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <parent link="${prefix}_pelvis_roll_link" />
+            <child link="${prefix}_pelvis_pitch_link" />
+        </joint>
 
-    <link name="l_knee_link">
-        <visual>
-            <origin xyz="0 0 0.25"/>
-            <geometry>
-                <cylinder radius="0.02" length="0.5" />
-            </geometry>
-            <material name="blue"/>
-        </visual>
-    </link>
+        <link name="${prefix}_knee_pitch_link">
+            <visual>
+                <origin xyz="0 0 -0.25"/>
+                <geometry>
+                    <cylinder radius="0.02" length="0.5" />
+                </geometry>
+                <material name="red"/>
+            </visual>
+        </link>
 
-    <link name="l_knee_pitch_link">
-    </link>
+        <joint name="${prefix}_knee_pitch" type="revolute">
+            <axis xyz="0 1 0" />
+            <limit effort="5.0" lower="0" upper="${pi/2}" velocity="5.0" />
+            <origin xyz="0 0 -0.5" rpy="0 0 0" />
+            <parent link="${prefix}_pelvis_pitch_link" />
+            <child link="${prefix}_knee_pitch_link" />
+        </joint>
 
-    <joint name="l_knee_fixed" type="fixed">
-        <origin xyz="0 0 -0.5" rpy="0 0 0" />
-        <parent link="l_pelvis_pitch_link" />
-        <child link="l_knee_link" />
-    </joint>
+        <link name="${prefix}_ankle_pitch_link">
+        </link>
 
-    <joint name="l_knee_pitch" type="revolute">
-        <axis xyz="0 1 0" />
-        <limit effort="5.0" lower="0" upper="${pi/2}" velocity="5.0" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="l_knee_link" />
-        <child link="l_knee_pitch_link" />
-    </joint>
+        <joint name="${prefix}_ankle_pitch" type="revolute">
+            <axis xyz="0 1 0" />
+            <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
+            <origin xyz="0 0 -0.5" rpy="0 0 0" />
+            <parent link="${prefix}_knee_pitch_link" />
+            <child link="${prefix}_ankle_pitch_link" />
+        </joint>
 
-    <link name="l_ankle_link">
-        <visual>
-            <origin xyz="0 0 0.25"/>
-            <geometry>
-                <cylinder radius="0.02" length="0.5" />
-            </geometry>
-            <material name="blue"/>
-        </visual>
-    </link>
+        <link name="${prefix}_ankle_roll_link">
+            <visual>
+                <origin xyz="0.075 0 -0.02"/>
+                <geometry>
+                    <box size="0.3 0.1 0.02" />
+                </geometry>
+                <material name="green" />
+            </visual>
+        </link>
 
-    <joint name="l_ankle_fixed" type="fixed">
-        <origin xyz="0 0 -0.5" rpy="0 0 0" />
-        <parent link="l_knee_pitch_link" />
-        <child link="l_ankle_link" />
-    </joint>
+        <joint name="${prefix}_ankle_roll" type="revolute">
+            <axis xyz="1 0 0" />
+            <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <parent link="${prefix}_ankle_pitch_link" />
+            <child link="${prefix}_ankle_roll_link" />
+        </joint>
+    </xacro:macro>
 
-    <link name="l_ankle_pitch_link">
-    </link>
+    <xacro:macro name="biped_left_leg" params="parent_link">
+        <xacro:biped_leg prefix="l" parent_link="${parent_link}" reflect="1" />
+    </xacro:macro>
 
-    <joint name="l_ankle_pitch" type="revolute">
-        <axis xyz="0 1 0" />
-        <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="l_ankle_link" />
-        <child link="l_ankle_pitch_link" />
-    </joint>
+    <xacro:macro name="biped_right_leg" params="parent_link">
+        <xacro:biped_leg prefix="r" parent_link="${parent_link}" reflect="-1" />
+    </xacro:macro>
 
-    <link name="l_ankle_roll_link">
-    </link>
-
-    <joint name="l_ankle_roll" type="revolute">
-        <axis xyz="1 0 0" />
-        <limit effort="5.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="l_ankle_pitch_link" />
-        <child link="l_ankle_roll_link" />
-    </joint>
-
-    <link name="l_foot_link">
-        <visual>
-            <origin xyz="0.07 0 0"/>
-            <geometry>
-                <box size="0.3 0.1 0.02" />
-            </geometry>
-        </visual>
-    </link>
-
-    <joint name="l_foot_fixed" type="fixed">
-        <origin xyz="0 0 0"/>
-        <parent link="l_ankle_roll_link" />
-        <child link="l_foot_link" />
-    </joint>
+    <xacro:biped_left_leg parent_link="base_link" />
+    <xacro:biped_right_leg parent_link="base_link" />
 </robot>
