@@ -1,5 +1,5 @@
 <launch>
-    <arg name="model" default="$(find biped_description)/urdf/biped.urdf" />
+    <arg name="model" default="$(find biped_description)/urdf/biped.urdf.xacro" />
     <arg name="gui" default="true" />
     <arg name="rvizconfig" default="$(find biped_description)/rviz/biped.rviz" />
 

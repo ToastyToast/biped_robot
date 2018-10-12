@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped">
+    <xacro:property name="width" value="0.2" />
+    <xacro:property name="bodylen" value="0.6" />
+    <xacro:property name="leglen" value="0.6" />
+
+    <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1 1 1 1" />
+    </material>
+
+    <xacro:macro name="leg" params="prefix reflect">
+        <link name="${prefix}_leg">
+            <visual>
+                <geometry>
+                    <box size="${leglen} 0.1 0.2" />
+                </geometry>
+                <origin rpy="0 ${pi/2} 0" xyz="0 0 -${leglen/2}" />
+                <material name="white"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <box size="${leglen} 0.1 0.2" />
+                </geometry>
+                <origin rpy="0 ${pi/2} 0" xyz="0 0 -${leglen/2}" />
+            </collision>
+        </link>
+
+        <joint name="base_to_${prefix}_leg" type="revolute">
+            <axis xyz="0 1 0"/>
+            <limit effort="5.0" lower="-1.57075" upper="1.57075" velocity="10.0" />
+            <dynamics friction="0.0" damping="0.0" />
+            <parent link="base_link"/>
+            <child link="${prefix}_leg" />
+            <origin xyz="0 ${reflect*(width+0.02)} 0.25" />
+        </joint>
+    </xacro:macro>
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <cylinder length="${bodylen}" radius="${width}" />
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="${bodylen}" radius="${width}" />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="10" />
+            <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2" />
+            <contact_coefficients mu="0.1" kp="0.0" kd="0.0"/>
+        </inertial>
+    </link>
+
+    <xacro:leg prefix="right" reflect="-1" />
+    <xacro:leg prefix="left" reflect="1" />
+
+</robot>
