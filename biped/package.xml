@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>biped</name>
+    <version>0.0.1</version>
+    <description>
+        biped metapackage
+    </description>
+
+    <license>TODO</license>
+
+    <maintainer email="leon112rus@gmail.com">Artem Kovalev</maintainer>
+
+    <url type="repository">https://github.com/toastytoast/biped</url>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <exec_depend>biped_description</exec_depend>
+
+    <export>
+        <metapackage/>
+    </export>
+</package>
