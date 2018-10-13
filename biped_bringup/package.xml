@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
-    <name>biped</name>
+    <name>biped_bringup</name>
     <version>0.0.1</version>
     <description>
-        biped metapackage
+        biped_bringup
     </description>
 
     <license>TODO</license>
@@ -13,11 +13,8 @@
     <url type="repository">https://github.com/toastytoast/biped</url>
 
     <buildtool_depend>catkin</buildtool_depend>
-    <exec_depend>biped_bringup</exec_depend>
-    <exec_depend>biped_description</exec_depend>
-    <exec_depend>biped_kinematics_dynamics</exec_depend>
+    <depend>biped_description</depend>
 
     <export>
-        <metapackage/>
     </export>
 </package>
