@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(${PROJECT_NAME}_CATKIN_DEPS
         roscpp
-        std_msgs
-        sensor_msgs
+
+        biped_msgs
         )
 
 find_package(catkin REQUIRED COMPONENTS
@@ -18,7 +18,8 @@ find_package(Eigen3 REQUIRED)
 catkin_package(
         INCLUDE_DIRS include
         LIBRARIES ${PROJECT_NAME}
-        DEPENDS ${${PROJECT_NAME}_CATKIN_DEPS}
+        CATKIN_DEPENDS
+        ${${PROJECT_NAME}_CATKIN_DEPS}
 )
 
 include_directories(
