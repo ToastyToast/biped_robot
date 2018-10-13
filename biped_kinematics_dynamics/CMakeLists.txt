@@ -43,4 +43,5 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
 
 add_executable(kinematics_node src/nodes/kinematics_node.cpp)
+add_dependencies(kinematics_node biped_msgs_generate_messages_cpp)
 target_link_libraries(kinematics_node ${PROJECT_NAME})
