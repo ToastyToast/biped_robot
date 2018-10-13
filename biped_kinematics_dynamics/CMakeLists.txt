@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(${PROJECT_NAME}_CATKIN_DEPS
         roscpp
+        urdf
 
         biped_msgs
         )
@@ -25,6 +26,7 @@ catkin_package(
 include_directories(
         include/
         ${catkin_INCLUDE_DIRS}
+        ${EIGEN3_INCLUDE_DIR}
 )
 
 set(${PROJECT_NAME}_LIBRARIES
@@ -32,10 +34,10 @@ set(${PROJECT_NAME}_LIBRARIES
         )
 
 set(${PROJECT_NAME}_SRC
-        include/biped_kinematics_dynamics/link_info.h
-        src/link_info.cpp
-        src/nodes/kinematics_node.cpp
-        )
+        include/biped_kinematics_dynamics/robot_tree/link_info.h
+        include/biped_kinematics_dynamics/robot_tree/robot_tree.h
+        src/robot_tree/link_info.cpp
+        src/robot_tree/robot_tree.cpp)
 
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
