@@ -35,7 +35,11 @@ set(${PROJECT_NAME}_LIBRARIES
 
 set(${PROJECT_NAME}_SRC
         include/biped_kinematics_dynamics/robot_tree/robot_tree.h
-        src/robot_tree/robot_tree.cpp)
+        src/robot_tree/robot_tree.cpp
+        include/biped_kinematics_dynamics/robot_tree/robot_link.h
+        src/robot_tree/robot_link.cpp
+        include/biped_kinematics_dynamics/robot_tree/robot_joint.h
+        src/robot_tree/robot_joint.cpp)
 
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
