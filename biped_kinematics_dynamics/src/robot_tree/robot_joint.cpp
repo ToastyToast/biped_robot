@@ -2,8 +2,12 @@
 
 using namespace biped_kinematics_dynamics;
 
-RobotJoint::RobotJoint(const std::string& joint_name)
-    : m_joint_name(joint_name)
+RobotJoint::RobotJoint(const std::string& joint_name,
+    const std::string& parent_link_name,
+    const std::string& child_link_name)
+    : m_joint_name(joint_name),
+    m_parent_link_name(parent_link_name),
+    m_child_link_name(child_link_name)
 {
 }
 

@@ -38,10 +38,10 @@ void RobotLink::addChildLink(const RobotLink::Ptr& child_link)
 {
     auto result = std::find_if(m_child_links.begin(), m_child_links.end(),
         [&](const RobotLink::Ptr& link) {
-            return link->getLinkName() != child_link->getLinkName();
+            return link->getLinkName() == child_link->getLinkName();
         });
     
-    if (result != m_child_links.end()) {
+    if (result == m_child_links.end()) {
         m_child_links.push_back(child_link);
     }
 }
@@ -49,4 +49,21 @@ void RobotLink::addChildLink(const RobotLink::Ptr& child_link)
 RobotLink::Vector RobotLink::getChildLinks() const
 {
     return m_child_links;
+}
+
+void RobotLink::addChildJoint(const RobotJoint::Ptr& child_joint)
+{
+    auto result = std::find_if(m_child_joints.begin(), m_child_joints.end(),
+        [&](const RobotJoint::Ptr& link) {
+            return link->getJointName() == child_joint->getJointName();
+        });
+    
+    if (result == m_child_joints.end()) {
+        m_child_joints.push_back(child_joint);
+    }
+}
+
+RobotJoint::Vector RobotLink::getChildJoints() const
+{
+    return m_child_joints;
 }

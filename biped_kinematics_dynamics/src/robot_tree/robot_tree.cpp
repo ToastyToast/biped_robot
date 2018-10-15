@@ -71,40 +71,61 @@ RobotJoint::Ptr RobotTree::findJoint(const std::string& joint_name) const
 
 void RobotTree::parseURDFModel(const urdf::Model& urdf_model)
 {
-    auto urdf_root_link = urdf_model.root_link_;
-    
-    for (auto link_it = urdf_model.links_.begin(); link_it != urdf_model.links_.end(); link_it++) {
-        auto urdf_link = link_it->second;
-        
-        if (!urdf_link) {
-            continue;
-        }
-        
-        RobotLink::Ptr link = std::make_shared<RobotLink>(urdf_link->name);
-        addLink(link);
-        
-        std::cout << link->getLinkName() << '\n';
-    }
+    m_root_link = parseURDFLink(urdf_model.root_link_);
+}
 
-    for (auto joint_it = urdf_model.joints_.begin(); joint_it != urdf_model.joints_.end(); joint_it++) {
-        auto urdf_joint = joint_it->second;
-       
-        if (!urdf_joint) {
-            continue;
-        }
+RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
+{
+    auto child_links = urdf_link->child_links;
+    auto child_joints = urdf_link->child_joints;
+    
+    RobotLink::Ptr parent_link = std::make_shared<RobotLink>(urdf_link->name);
+    addLink(parent_link);
+    
+    for (const auto& child_urdf_link : child_links) {
+        RobotLink::Ptr child_link = parseURDFLink(child_urdf_link);
+        child_link->setParentLink(parent_link);
         
-        RobotJoint::Ptr joint = std::make_shared<RobotJoint>(urdf_joint->name);
-        addJoint(joint);
-        
-        std::cout << joint->getJointName() << '\n';
+        parent_link->addChildLink(child_link);
     }
+    
+    for (const auto& child_urdf_joint : child_joints) {
+        RobotJoint::Ptr child_joint = std::make_shared<RobotJoint>(
+            child_urdf_joint->name,
+            child_urdf_joint->parent_link_name,
+            child_urdf_joint->child_link_name);
+        
+        parent_link->addChildJoint(child_joint);
+    }
+    
+    return parent_link;
 }
 
 
 std::ostream& biped_kinematics_dynamics::operator<<(std::ostream& out, const RobotTree& robot_tree)
 {
-    out << "Links: " << robot_tree.m_robot_links.size() << '\n';
-    out << "Joints: " << robot_tree.m_robot_joints.size() << '\n';
+    out << robot_tree.m_root_link;
+    return out;
+}
+
+std::ostream& biped_kinematics_dynamics::operator<<(std::ostream& out, const RobotLink::Ptr& robot_link)
+{
     
+    auto child_links = robot_link->getChildLinks();
+    auto child_joints = robot_link->getChildJoints();
+    
+    out << "[" << robot_link->getLinkName() << "]";
+    
+    out << "( ";
+    for (const auto& child_joint : child_joints) {
+        out << child_joint->getJointName() << " ";
+    }
+    out << ")";
+    out << '\n';
+    
+    for (const auto& child_link : child_links) {
+        out << child_link;
+    }
+
     return out;
 }

@@ -30,6 +30,7 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const RobotTree& robot_tree);
 private:
     void parseURDFModel(const urdf::Model& urdf_model);
+    RobotLink::Ptr parseURDFLink(const urdf::LinkSharedPtr& urdf_link);
 private:
     RobotLink::Ptr m_root_link {};
     
@@ -38,6 +39,7 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& out, const RobotTree& robot_tree);
+std::ostream& operator<<(std::ostream& out, const RobotLink::Ptr& robot_link);
 
 }
 

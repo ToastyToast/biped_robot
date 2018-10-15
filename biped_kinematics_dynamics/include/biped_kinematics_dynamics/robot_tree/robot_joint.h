@@ -2,6 +2,7 @@
 #define BIPED_KINEMATICS_DYNAMICS_ROBOT_JOINT_H
 
 #include <string>
+#include <vector>
 #include <memory>
 
 namespace biped_kinematics_dynamics {
@@ -12,8 +13,12 @@ public:
     using ConstPtr = std::shared_ptr<const RobotJoint>;
     using WeakPtr = std::weak_ptr<RobotJoint>;
     using ConstWeakPtr = std::weak_ptr<const RobotJoint>;
+    
+    using Vector = std::vector<RobotJoint::Ptr>;
 public:
-    RobotJoint(const std::string& joint_name);
+    RobotJoint(const std::string& joint_name,
+        const std::string& parent_link_name,
+        const std::string& child_link_name);
     ~RobotJoint();
 
     std::string getJointName() const;
