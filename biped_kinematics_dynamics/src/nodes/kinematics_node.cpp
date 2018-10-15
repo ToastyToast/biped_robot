@@ -9,15 +9,9 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "kinematics_node");
     ros::NodeHandle nh("~");
 
-    std::string model_name;
-    if (!nh.getParam("robot_model", model_name)) {
-        ROS_ERROR("URDF model is required!");
-        return -1;
-    }
-
     urdf::Model robot_model;
-    if (!robot_model.initFile(model_name)) {
-        ROS_ERROR("Failed to parse URDF file");
+    if (!robot_model.initParam("robot_description")) {
+        ROS_ERROR("Failed to load robot description");
         return -1;
     }
 

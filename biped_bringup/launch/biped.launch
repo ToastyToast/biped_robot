@@ -1,8 +1,17 @@
 <launch>
-    <include file="$(find biped_description)/launch/display.launch" />
+    <arg name="model" default="$(find biped_description)/urdf/biped.urdf.xacro" />
+    <arg name="gui" default="true" />
+    <arg name="rvizconfig" default="$(find biped_description)/rviz/biped.rviz" />
+
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+    <param name="use_gui" value="$(arg gui)" />
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
     <node pkg="biped_kinematics_dynamics" type="kinematics_node"
           name="kinematics_node" output="screen">
-        <param name="robot_model" value="" />
+        <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
     </node>
 </launch>
