@@ -1,6 +1,3 @@
-
-#include <biped_kinematics_dynamics/robot_tree/robot_tree.h>
-
 #include "biped_kinematics_dynamics/robot_tree/robot_tree.h"
 
 using namespace biped_kinematics_dynamics;
@@ -21,8 +18,6 @@ RobotTree::RobotTree(const std::string& robot_model_description)
 
 RobotTree::RobotTree(const urdf::Model& urdf_model)
 {
-    
-    
     parseURDFModel(urdf_model);
 }
 
