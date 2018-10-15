@@ -10,7 +10,8 @@ namespace biped_kinematics_dynamics {
 
 class RobotTree {
 public:
-    explicit RobotTree(const std::string& model_name);
+public:
+    explicit RobotTree(const std::string& robot_model_description);
     explicit RobotTree(const urdf::Model& urdf_model);
     ~RobotTree();
 

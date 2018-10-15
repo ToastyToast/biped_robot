@@ -34,9 +34,7 @@ set(${PROJECT_NAME}_LIBRARIES
         )
 
 set(${PROJECT_NAME}_SRC
-        include/biped_kinematics_dynamics/robot_tree/link_info.h
         include/biped_kinematics_dynamics/robot_tree/robot_tree.h
-        src/robot_tree/link_info.cpp
         src/robot_tree/robot_tree.cpp)
 
 
