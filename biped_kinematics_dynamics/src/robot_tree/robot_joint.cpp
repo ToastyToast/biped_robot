@@ -3,8 +3,8 @@
 using namespace biped_kinematics_dynamics;
 
 RobotJoint::RobotJoint(const std::string& joint_name)
+    : m_joint_name(joint_name)
 {
-
 }
 
 RobotJoint::~RobotJoint()

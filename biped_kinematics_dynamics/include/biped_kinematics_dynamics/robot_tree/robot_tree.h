@@ -14,19 +14,27 @@ namespace biped_kinematics_dynamics {
 
 class RobotTree {
 public:
-    using LinkMap = std::unordered_map<std::string, RobotJoint::Ptr>;
-    using JointMap = std::unordered_map<std::string, RobotLink::Ptr>;
+    using LinkMap = std::unordered_map<std::string, RobotLink::Ptr>;
+    using JointMap = std::unordered_map<std::string, RobotJoint::Ptr>;
 public:
     explicit RobotTree(const std::string& robot_model_description);
     explicit RobotTree(const urdf::Model& urdf_model);
     ~RobotTree();
+    
+    void addLink(const RobotLink::Ptr& link);
+    void addJoint(const RobotJoint::Ptr& joint);
+    
+    RobotLink::Ptr findLink(const std::string& link_name) const;
+    RobotJoint::Ptr findJoint(const std::string& joint_name) const;
 
     friend std::ostream& operator<<(std::ostream& out, const RobotTree& robot_tree);
 private:
     void parseURDFModel(const urdf::Model& urdf_model);
 private:
-    LinkMap m_robot_links {};
-    JointMap m_robot_joints {};
+    RobotLink::Ptr m_root_link {};
+    
+    LinkMap m_robot_links;
+    JointMap m_robot_joints;
 };
 
 std::ostream& operator<<(std::ostream& out, const RobotTree& robot_tree);

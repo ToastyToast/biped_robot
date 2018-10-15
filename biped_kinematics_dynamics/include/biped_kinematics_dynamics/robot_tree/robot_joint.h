@@ -21,10 +21,10 @@ public:
     std::string getParentLinkName() const;
     std::string getChildLinkName() const;
 private:
-    std::string m_joint_name {};
+    std::string m_joint_name;
     
-    std::string m_parent_link_name {};
-    std::string m_child_link_name {};
+    std::string m_parent_link_name;
+    std::string m_child_link_name;
 };
 
 }
