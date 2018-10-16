@@ -43,30 +43,26 @@ void RobotTreePublisher::publishTransforms()
     
     std::vector<geometry_msgs::TransformStamped> transforms;
     
-    auto child_joints = root_link->getChildJoints();
-    for (const auto& child_joint : child_joints) {
-        Eigen::Vector3f child_pos = child_joint->getParentToJointTrans();
-        Eigen::Quaternionf child_quat = child_joint->getParentToJointQuat();
+    for (const auto& joint_kv : m_robot_tree->getJointMap()) {
+        auto robot_joint = joint_kv.second;
+        Eigen::Vector3f joint_pos = robot_joint->getParentToJointTrans();
+        Eigen::Quaternionf joint_quat = robot_joint->getParentToJointQuat();
         
-        child_pos = child_pos + base_pos;
-        child_quat = child_quat * base_quat;
-        child_quat.normalize();
-        
-        std::string child_link_name = child_joint->getChildLinkName();
+        std::string parent_link_name = robot_joint->getParentLinkName();
+        std::string child_link_name = robot_joint->getChildLinkName();
         
         geometry_msgs::TransformStamped tf;
         tf.header.stamp = ros::Time::now();
-        tf.header.frame_id = root_link_name;
+        tf.header.frame_id = parent_link_name;
         tf.child_frame_id = child_link_name;
-        tf.transform.translation.x = child_pos(0);
-        tf.transform.translation.y = child_pos(1);
-        tf.transform.translation.z = child_pos(2);
+        tf.transform.translation.x = joint_pos(0);
+        tf.transform.translation.y = joint_pos(1);
+        tf.transform.translation.z = joint_pos(2);
         //
-        tf.transform.rotation.w = child_quat.w();
-        tf.transform.rotation.x = child_quat.vec()(0);
-        tf.transform.rotation.y = child_quat.vec()(0);
-        tf.transform.rotation.z = child_quat.vec()(0);
-        
+        tf.transform.rotation.w = joint_quat.w();
+        tf.transform.rotation.x = joint_quat.vec()(0);
+        tf.transform.rotation.y = joint_quat.vec()(0);
+        tf.transform.rotation.z = joint_quat.vec()(0);
         transforms.push_back(tf);
     }
     

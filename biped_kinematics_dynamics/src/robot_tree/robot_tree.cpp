@@ -31,6 +31,16 @@ RobotLink::Ptr RobotTree::getRootLink() const
     return m_root_link;
 }
 
+RobotTree::LinkMap RobotTree::getLinkMap() const
+{
+    return m_robot_links;
+}
+
+RobotTree::JointMap RobotTree::getJointMap() const
+{
+    return m_robot_joints;
+}
+
 void RobotTree::addLink(const RobotLink::Ptr& link)
 {
     if (link) {

@@ -23,6 +23,9 @@ public:
     
     RobotLink::Ptr getRootLink() const;
     
+    LinkMap getLinkMap() const;
+    JointMap getJointMap() const;
+    
     void addLink(const RobotLink::Ptr& link);
     void addJoint(const RobotJoint::Ptr& joint);
     
