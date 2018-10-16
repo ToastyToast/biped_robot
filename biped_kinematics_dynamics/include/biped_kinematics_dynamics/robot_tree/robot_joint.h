@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <Eigen/Core>
+#include <Eigen/Geometry>
 
 namespace biped_kinematics_dynamics {
 
@@ -35,6 +36,9 @@ public:
         Eigen::Vector3f axis;
         JointLimits limits;
         
+        Eigen::Vector3f parent_to_joint_trans;
+        Eigen::Quaternionf parent_to_joint_quat;
+        
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 public:
@@ -42,6 +46,11 @@ public:
         const std::string& parent_link_name,
         const std::string& child_link_name);
     ~RobotJoint();
+    
+    void setParentToJointTrans(const Eigen::Vector3f& trans);
+    Eigen::Vector3f getParentToJointTrans() const;
+    void setParentToJointQuat(const Eigen::Quaternionf& quat);
+    Eigen::Quaternionf getParentToJointQuat() const;
 
     std::string getJointName() const;
     

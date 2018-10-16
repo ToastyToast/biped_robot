@@ -16,6 +16,27 @@ RobotJoint::~RobotJoint()
 
 }
 
+
+void RobotJoint::setParentToJointTrans(const Eigen::Vector3f& trans)
+{
+    m_joint_data.parent_to_joint_trans = trans;
+}
+
+Eigen::Vector3f RobotJoint::getParentToJointTrans() const
+{
+    return m_joint_data.parent_to_joint_trans;
+}
+
+void RobotJoint::setParentToJointQuat(const Eigen::Quaternionf& quat)
+{
+    m_joint_data.parent_to_joint_quat = quat;
+}
+
+Eigen::Quaternionf RobotJoint::getParentToJointQuat() const
+{
+    return m_joint_data.parent_to_joint_quat;
+}
+
 std::string RobotJoint::getJointName() const
 {
     return m_joint_name;

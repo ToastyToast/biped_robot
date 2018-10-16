@@ -31,6 +31,8 @@ public:
 private:
     void parseURDFModel(const urdf::Model& urdf_model);
     RobotLink::Ptr parseURDFLink(const urdf::LinkSharedPtr& urdf_link);
+    
+    void buildTree();
 private:
     RobotLink::Ptr m_root_link {};
     

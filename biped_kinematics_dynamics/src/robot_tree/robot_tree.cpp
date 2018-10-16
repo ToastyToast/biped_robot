@@ -95,6 +95,25 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
             child_urdf_joint->parent_link_name,
             child_urdf_joint->child_link_name);
         
+        auto to_joint_urdf_trans = child_urdf_joint->parent_to_joint_origin_transform.position;
+        auto to_joint_urdf_quat = child_urdf_joint->parent_to_joint_origin_transform.rotation;
+        
+        Eigen::Vector3f to_joint_trans(
+            to_joint_urdf_trans.x,
+            to_joint_urdf_trans.y,
+            to_joint_urdf_trans.z
+        );
+        
+        Eigen::Quaternionf to_joint_quat(
+            to_joint_urdf_quat.w,
+            to_joint_urdf_quat.x,
+            to_joint_urdf_quat.y,
+            to_joint_urdf_quat.z
+        );
+        
+        child_joint->setParentToJointTrans(to_joint_trans);
+        child_joint->setParentToJointQuat(to_joint_quat);
+        
         parent_link->addChildJoint(child_joint);
         addJoint(child_joint);
     }
@@ -102,6 +121,12 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
     return parent_link;
 }
 
+void RobotTree::buildTree()
+{
+    if (!m_root_link) {
+        return;
+    }
+}
 
 std::ostream& biped_kinematics_dynamics::operator<<(std::ostream& out, const RobotTree& robot_tree)
 {
