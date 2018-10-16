@@ -26,6 +26,11 @@ RobotTree::~RobotTree()
 
 }
 
+RobotLink::Ptr RobotTree::getRootLink() const
+{
+    return m_root_link;
+}
+
 void RobotTree::addLink(const RobotLink::Ptr& link)
 {
     if (link) {
@@ -72,6 +77,9 @@ RobotJoint::Ptr RobotTree::findJoint(const std::string& joint_name) const
 void RobotTree::parseURDFModel(const urdf::Model& urdf_model)
 {
     m_root_link = parseURDFLink(urdf_model.root_link_);
+    if (!m_root_link) {
+        throw std::runtime_error{"Invalid URDF model"};
+    }
 }
 
 RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
@@ -112,6 +120,7 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
             to_joint_urdf_quat.y,
             to_joint_urdf_quat.z
         );
+        to_joint_quat.normalize();
         child_joint->setParentToJointQuat(to_joint_quat);
         
         auto urdf_joint_type = child_urdf_joint->type;
@@ -158,13 +167,6 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
     }
     
     return parent_link;
-}
-
-void RobotTree::buildTree()
-{
-    if (!m_root_link) {
-        return;
-    }
 }
 
 std::ostream& biped_kinematics_dynamics::operator<<(std::ostream& out, const RobotTree& robot_tree)

@@ -21,6 +21,8 @@ public:
     explicit RobotTree(const urdf::Model& urdf_model);
     ~RobotTree();
     
+    RobotLink::Ptr getRootLink() const;
+    
     void addLink(const RobotLink::Ptr& link);
     void addJoint(const RobotJoint::Ptr& joint);
     
@@ -31,10 +33,8 @@ public:
 private:
     void parseURDFModel(const urdf::Model& urdf_model);
     RobotLink::Ptr parseURDFLink(const urdf::LinkSharedPtr& urdf_link);
-    
-    void buildTree();
 private:
-    RobotLink::Ptr m_root_link {};
+    RobotLink::Ptr m_root_link {nullptr};
     
     LinkMap m_robot_links;
     JointMap m_robot_joints;

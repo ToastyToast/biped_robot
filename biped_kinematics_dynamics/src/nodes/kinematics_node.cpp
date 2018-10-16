@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 
 #include "biped_kinematics_dynamics/robot_tree/robot_tree.h"
+#include "biped_kinematics_dynamics/robot_tree_publisher.h"
 
 using namespace biped_kinematics_dynamics;
 
@@ -16,22 +17,29 @@ int main(int argc, char** argv)
         ROS_ERROR("Failed to load robot description");
         return -1;
     }
-
-    RobotTree robot_tree(robot_model);
-    std::cout << robot_tree << '\n';
     
-    auto robot_link = robot_tree.findLink("r_ankle_roll_link");
-    printUntilRoot(robot_link);
-    std::cout << '\n';
+    try {
+        std::shared_ptr<RobotTree> robot_tree = std::make_shared<RobotTree>(robot_model);
+        std::cout << robot_tree << '\n';
     
-    robot_link = robot_tree.findLink("l_ankle_roll_link");
-    printUntilRoot(robot_link);
-    std::cout << '\n';
-
-    ROS_INFO("Starting kinematics_node");
-    ros::Rate rate(100);
-    while (nh.ok()) {
-        rate.sleep();
+        auto robot_link = robot_tree->findLink("r_ankle_roll_link");
+        printUntilRoot(robot_link);
+        std::cout << '\n';
+    
+        robot_link = robot_tree->findLink("l_ankle_roll_link");
+        printUntilRoot(robot_link);
+        std::cout << '\n';
+    
+        ROS_INFO("Starting kinematics_node");
+        RobotTreePublisher treePublisher(robot_tree);
+        ros::Rate rate(100);
+        while (nh.ok()) {
+            treePublisher.publishTransforms();
+            rate.sleep();
+            
+        }
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
     }
 
     return 0;
