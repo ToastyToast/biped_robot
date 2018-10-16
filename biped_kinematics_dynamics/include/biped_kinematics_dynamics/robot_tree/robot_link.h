@@ -5,6 +5,9 @@
 #include <vector>
 #include <memory>
 
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+
 #include "biped_kinematics_dynamics/robot_tree/robot_joint.h"
 
 namespace biped_kinematics_dynamics {
@@ -17,6 +20,13 @@ public:
     using ConstWeakPtr = std::weak_ptr<const RobotLink>;
     
     using Vector = std::vector<RobotLink::Ptr>;
+public:
+    struct LinkData {
+        Eigen::Vector3f position;
+        Eigen::Quaternionf rotation;
+    
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    };
 public:
     RobotLink(const std::string& link_name);
     ~RobotLink();
@@ -32,11 +42,13 @@ public:
     void addChildJoint(const RobotJoint::Ptr& child_joint);
     RobotJoint::Vector getChildJoints() const;
 private:
-    std::string m_link_name;
+    LinkData m_link_data;
     
     RobotLink::Ptr m_parent_link {nullptr};
     RobotLink::Vector m_child_links;
     RobotJoint::Vector m_child_joints;
+    
+    std::string m_link_name;
 };
 
 }
