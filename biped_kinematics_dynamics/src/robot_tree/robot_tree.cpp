@@ -79,7 +79,9 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
     auto child_links = urdf_link->child_links;
     auto child_joints = urdf_link->child_joints;
     
-    RobotLink::Ptr parent_link = std::make_shared<RobotLink>(urdf_link->name);
+    RobotLink::Ptr parent_link = std::make_shared<RobotLink>(
+        urdf_link->name
+        );
     addLink(parent_link);
     
     for (const auto& child_urdf_link : child_links) {
@@ -116,6 +118,12 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
         
         parent_link->addChildJoint(child_joint);
         addJoint(child_joint);
+        
+        RobotLink::Ptr child_link = findLink(child_joint->getChildLinkName());
+        if (!child_link) {
+            throw std::runtime_error {"Child link for joint doesn't exist"};
+        }
+        child_link->setParentJoint(child_joint);
     }
     
     return parent_link;

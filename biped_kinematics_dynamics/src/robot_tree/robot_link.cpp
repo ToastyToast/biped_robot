@@ -34,6 +34,20 @@ RobotLink::Ptr RobotLink::getParentLink() const
     return m_parent_link;
 }
 
+
+void RobotLink::setParentJoint(const RobotJoint::Ptr& parent_joint)
+{
+    if (parent_joint) {
+        m_parent_joint = parent_joint;
+    }
+}
+
+RobotJoint::Ptr RobotLink::getParentJoint() const
+{
+    return m_parent_joint;
+}
+
+
 void RobotLink::addChildLink(const RobotLink::Ptr& child_link)
 {
     auto result = std::find_if(m_child_links.begin(), m_child_links.end(),
@@ -50,6 +64,8 @@ RobotLink::Vector RobotLink::getChildLinks() const
 {
     return m_child_links;
 }
+
+
 
 void RobotLink::addChildJoint(const RobotJoint::Ptr& child_joint)
 {

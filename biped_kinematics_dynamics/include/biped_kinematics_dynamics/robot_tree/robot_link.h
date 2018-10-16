@@ -36,6 +36,9 @@ public:
     void setParentLink(const RobotLink::Ptr& parent_link);
     RobotLink::Ptr getParentLink() const;
     
+    void setParentJoint(const RobotJoint::Ptr& parent_joint);
+    RobotJoint::Ptr getParentJoint() const;
+    
     void addChildLink(const RobotLink::Ptr& child_link);
     RobotLink::Vector getChildLinks() const;
     
@@ -45,6 +48,7 @@ private:
     LinkData m_link_data;
     
     RobotLink::Ptr m_parent_link {nullptr};
+    RobotJoint::Ptr m_parent_joint {nullptr};
     RobotLink::Vector m_child_links;
     RobotJoint::Vector m_child_joints;
     
