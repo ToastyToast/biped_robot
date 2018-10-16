@@ -98,23 +98,54 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
             child_urdf_joint->child_link_name);
         
         auto to_joint_urdf_trans = child_urdf_joint->parent_to_joint_origin_transform.position;
-        auto to_joint_urdf_quat = child_urdf_joint->parent_to_joint_origin_transform.rotation;
-        
         Eigen::Vector3f to_joint_trans(
             to_joint_urdf_trans.x,
             to_joint_urdf_trans.y,
             to_joint_urdf_trans.z
         );
-        
+        child_joint->setParentToJointTrans(to_joint_trans);
+    
+        auto to_joint_urdf_quat = child_urdf_joint->parent_to_joint_origin_transform.rotation;
         Eigen::Quaternionf to_joint_quat(
             to_joint_urdf_quat.w,
             to_joint_urdf_quat.x,
             to_joint_urdf_quat.y,
             to_joint_urdf_quat.z
         );
-        
-        child_joint->setParentToJointTrans(to_joint_trans);
         child_joint->setParentToJointQuat(to_joint_quat);
+        
+        auto urdf_joint_type = child_urdf_joint->type;
+        switch (urdf_joint_type) {
+            case urdf::Joint::REVOLUTE:
+                child_joint->setJointType(RobotJoint::JointType::REVOLUTE);
+                break;
+            case urdf::Joint::PRISMATIC:
+                child_joint->setJointType(RobotJoint::JointType::PRISMATIC);
+                break;
+            case urdf::Joint::FIXED:
+                child_joint->setJointType(RobotJoint::JointType::FIXED);
+                break;
+            default:
+                throw std::runtime_error{"Trying to add unsupported joint type to tree"};
+                break;
+        }
+        
+        auto urdf_joint_axis = child_urdf_joint->axis;
+        Eigen::Vector3f joint_axis(
+            urdf_joint_axis.x,
+            urdf_joint_axis.y,
+            urdf_joint_axis.z
+            );
+        
+        child_joint->setJointAxis(joint_axis);
+        
+        auto urdf_joint_limits = child_urdf_joint->limits;
+        RobotJoint::JointLimits joint_limits;
+        joint_limits.effort = urdf_joint_limits->effort;
+        joint_limits.lower = urdf_joint_limits->lower;
+        joint_limits.upper = urdf_joint_limits->upper;
+        joint_limits.velocity = urdf_joint_limits->velocity;
+        child_joint->setJointLimits(joint_limits);
         
         parent_link->addChildJoint(child_joint);
         addJoint(child_joint);

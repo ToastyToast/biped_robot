@@ -21,7 +21,8 @@ public:
 public:
     enum class JointType {
         REVOLUTE,
-        PRISMATIC
+        PRISMATIC,
+        FIXED
     };
     
     struct JointLimits {
@@ -49,8 +50,18 @@ public:
     
     void setParentToJointTrans(const Eigen::Vector3f& trans);
     Eigen::Vector3f getParentToJointTrans() const;
+    
     void setParentToJointQuat(const Eigen::Quaternionf& quat);
     Eigen::Quaternionf getParentToJointQuat() const;
+    
+    void setJointType(const JointType& type);
+    JointType getJointType() const;
+    
+    void setJointAxis(const Eigen::Vector3f& axis);
+    Eigen::Vector3f getJointAxis() const;
+    
+    void setJointLimits(const JointLimits& limits);
+    JointLimits getJointLimits() const;
 
     std::string getJointName() const;
     

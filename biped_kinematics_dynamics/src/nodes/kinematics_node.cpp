@@ -45,6 +45,9 @@ void printUntilRoot(const RobotLink::Ptr& link)
         auto parent_joint = robot_link->getParentJoint();
         if (parent_joint) {
             std::cout << "Parent joint: " << parent_joint->getJointName() << '\n';
+            std::cout << parent_joint->getParentToJointTrans() << '\n';
+            auto quat = parent_joint->getParentToJointQuat();
+            std::cout << "Quat:\n" << quat.w() << '\n' << quat.vec() << '\n';
         }
         
         auto child_links = robot_link->getChildLinks();
