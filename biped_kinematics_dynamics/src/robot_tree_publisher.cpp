@@ -34,12 +34,8 @@ void RobotTreePublisher::publishTransforms()
 {
     RobotLink::Ptr root_link = m_robot_tree->getRootLink();
     if (!root_link) {
-        throw std::runtime_error{"RobotTree has no root link!"};
+        throw std::runtime_error{"Invalid RobotTree. No root link"};
     }
-    
-    Eigen::Vector3f base_pos(0.0f, 0.0f, 0.0f);
-    Eigen::Quaternionf base_quat(1.0f, 0.0f, 0.0f, 0.0f);
-    std::string root_link_name = root_link->getLinkName();
     
     std::vector<geometry_msgs::TransformStamped> transforms;
     
