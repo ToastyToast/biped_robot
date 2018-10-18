@@ -33,12 +33,9 @@ int main(int argc, char** argv)
         ROS_INFO("Starting kinematics_node");
         
         RobotTreePublisher treePublisher(robot_tree);
-        ros::Rate rate(100);
         while (nh.ok()) {
             treePublisher.update();
-            
             ros::spinOnce();
-            rate.sleep();
         }
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
