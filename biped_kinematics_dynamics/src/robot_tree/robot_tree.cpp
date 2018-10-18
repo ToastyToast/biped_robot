@@ -86,7 +86,12 @@ RobotJoint::Ptr RobotTree::findJoint(const std::string& joint_name) const
 
 void RobotTree::parseURDFModel(const urdf::Model& urdf_model)
 {
+    if (!urdf_model.root_link_) {
+        throw std::runtime_error{"Invalid URDF model"};
+    }
+    
     m_root_link = parseURDFLink(urdf_model.root_link_);
+    
     if (!m_root_link) {
         throw std::runtime_error{"Invalid URDF model"};
     }
@@ -94,6 +99,10 @@ void RobotTree::parseURDFModel(const urdf::Model& urdf_model)
 
 RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
 {
+    if (!urdf_link) {
+        return std::shared_ptr<RobotLink>{nullptr};
+    }
+    
     auto child_links = urdf_link->child_links;
     auto child_joints = urdf_link->child_joints;
     
@@ -103,13 +112,22 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
     addLink(parent_link);
     
     for (const auto& child_urdf_link : child_links) {
-        RobotLink::Ptr child_link = parseURDFLink(child_urdf_link);
-        child_link->setParentLink(parent_link);
+        if (!child_urdf_link) {
+            return parent_link;
+        }
         
-        parent_link->addChildLink(child_link);
+        RobotLink::Ptr child_link = parseURDFLink(child_urdf_link);
+        if (child_link) {
+            child_link->setParentLink(parent_link);
+    
+            parent_link->addChildLink(child_link);
+        }
     }
     
     for (const auto& child_urdf_joint : child_joints) {
+        if (!child_urdf_joint) {
+            return parent_link;
+        }
         RobotJoint::Ptr child_joint = std::make_shared<RobotJoint>(
             child_urdf_joint->name,
             child_urdf_joint->parent_link_name,
@@ -130,7 +148,6 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
             to_joint_urdf_quat.y,
             to_joint_urdf_quat.z
         );
-        to_joint_quat.normalize();
         child_joint->setParentToJointQuat(to_joint_quat);
         
         auto urdf_joint_type = child_urdf_joint->type;
@@ -145,7 +162,8 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
                 child_joint->setJointType(RobotJoint::JointType::FIXED);
                 break;
             default:
-                throw std::runtime_error{"Trying to add unsupported joint type to tree"};
+                ROS_WARN("Trying to add unsupported joint type to RobotTree!");
+                child_joint->setJointType(RobotJoint::JointType::FIXED);
                 break;
         }
         
@@ -159,12 +177,14 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
         child_joint->setJointAxis(joint_axis);
         
         auto urdf_joint_limits = child_urdf_joint->limits;
-        RobotJoint::JointLimits joint_limits;
-        joint_limits.effort = urdf_joint_limits->effort;
-        joint_limits.lower = urdf_joint_limits->lower;
-        joint_limits.upper = urdf_joint_limits->upper;
-        joint_limits.velocity = urdf_joint_limits->velocity;
-        child_joint->setJointLimits(joint_limits);
+        if (urdf_joint_limits) {
+            RobotJoint::JointLimits joint_limits;
+            joint_limits.effort = urdf_joint_limits->effort;
+            joint_limits.lower = urdf_joint_limits->lower;
+            joint_limits.upper = urdf_joint_limits->upper;
+            joint_limits.velocity = urdf_joint_limits->velocity;
+            child_joint->setJointLimits(joint_limits);
+        }
         
         parent_link->addChildJoint(child_joint);
         addJoint(child_joint);
@@ -181,9 +201,11 @@ RobotLink::Ptr RobotTree::parseURDFLink(const urdf::LinkSharedPtr& urdf_link)
 
 std::ostream& biped_kinematics_dynamics::operator<<(std::ostream& out, const RobotTree& robot_tree)
 {
-    out << "Links: " << robot_tree.m_robot_links.size() << '\n';
-    out << "Joints: " << robot_tree.m_robot_joints.size() << '\n';
-    out << robot_tree.m_root_link;
+    if (robot_tree.m_root_link) {
+        out << "Links: " << robot_tree.m_robot_links.size() << '\n';
+        out << "Joints: " << robot_tree.m_robot_joints.size() << '\n';
+        out << robot_tree.m_root_link;
+    }
     return out;
 }
 
