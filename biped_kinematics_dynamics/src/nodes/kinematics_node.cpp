@@ -2,6 +2,7 @@
 
 #include "biped_kinematics_dynamics/robot_tree/robot_tree.h"
 #include "biped_kinematics_dynamics/robot_tree_publisher.h"
+#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver.h"
 
 using namespace biped_kinematics_dynamics;
 
@@ -22,15 +23,20 @@ int main(int argc, char** argv)
         std::shared_ptr<RobotTree> robot_tree = std::make_shared<RobotTree>(robot_model);
         std::cout << robot_tree << '\n';
     
-        auto robot_link = robot_tree->findLink("r_ankle_roll_link");
+        auto robot_link = robot_tree->findLink("r_ankle");
         printUntilRoot(robot_link);
         std::cout << '\n';
     
-        robot_link = robot_tree->findLink("l_ankle_roll_link");
+        robot_link = robot_tree->findLink("l_ankle");
         printUntilRoot(robot_link);
         std::cout << '\n';
         
         ROS_INFO("Starting kinematics_node");
+        
+        Eigen::Vector3f target_pos(0.0f, 0.0f, 0.0f);
+        Eigen::Quaternionf target_rot(1.0f, 0.0f, 0.0f, 0.0f);
+        RobotTreeIKSolver ik_solver(robot_tree);
+        ik_solver.cartesianToJoint("r_ankle", target_pos, target_rot);
         
         RobotTreePublisher treePublisher(robot_tree);
         while (nh.ok()) {
