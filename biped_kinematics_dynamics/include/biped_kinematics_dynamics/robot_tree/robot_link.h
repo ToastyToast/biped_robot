@@ -21,13 +21,6 @@ public:
     
     using Vector = std::vector<RobotLink::Ptr>;
 public:
-    struct LinkData {
-        Eigen::Vector3f position;
-        Eigen::Quaternionf rotation;
-    
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    };
-public:
     RobotLink(const std::string& link_name);
     ~RobotLink();
     
@@ -45,8 +38,6 @@ public:
     void addChildJoint(const RobotJoint::Ptr& child_joint);
     RobotJoint::Vector getChildJoints() const;
 private:
-    LinkData m_link_data;
-    
     RobotLink::Ptr m_parent_link {nullptr};
     RobotJoint::Ptr m_parent_joint {nullptr};
     RobotLink::Vector m_child_links;

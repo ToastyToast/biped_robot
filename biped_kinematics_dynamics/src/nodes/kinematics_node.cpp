@@ -10,7 +10,7 @@ void printUntilRoot(const RobotLink::Ptr& link);
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "kinematics_node");
-    ros::NodeHandle nh("~");
+    ros::NodeHandle nh("");
 
     urdf::Model robot_model;
     if (!robot_model.initParam("robot_description")) {
@@ -29,14 +29,16 @@ int main(int argc, char** argv)
         robot_link = robot_tree->findLink("l_ankle_roll_link");
         printUntilRoot(robot_link);
         std::cout << '\n';
-    
+        
         ROS_INFO("Starting kinematics_node");
+        
         RobotTreePublisher treePublisher(robot_tree);
         ros::Rate rate(100);
         while (nh.ok()) {
-            treePublisher.publishTransforms();
-            rate.sleep();
+            treePublisher.update();
             
+            ros::spinOnce();
+            rate.sleep();
         }
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;

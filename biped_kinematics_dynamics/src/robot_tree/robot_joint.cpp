@@ -29,12 +29,12 @@ Eigen::Vector3f RobotJoint::getParentToJointTrans() const
 
 void RobotJoint::setParentToJointQuat(const Eigen::Quaternionf& quat)
 {
-    m_joint_data.parent_to_joint_quat = quat;
+    m_joint_data.parent_to_joint_quat = quat.normalized();
 }
 
 Eigen::Quaternionf RobotJoint::getParentToJointQuat() const
 {
-    return m_joint_data.parent_to_joint_quat;
+    return m_joint_data.parent_to_joint_quat.normalized();
 }
 
 void RobotJoint::setJointType(const JointType& type)
@@ -66,7 +66,6 @@ RobotJoint::JointLimits RobotJoint::getJointLimits() const
 {
     return m_joint_data.limits;
 }
-
 
 std::string RobotJoint::getJointName() const
 {
