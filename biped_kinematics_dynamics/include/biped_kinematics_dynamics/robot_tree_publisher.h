@@ -20,7 +20,6 @@ public:
     void publishTransforms();
 private:
     std::shared_ptr<RobotTree> m_robot_tree {nullptr};
-    float m_publish_rate {100.0f};
     
     ros::Subscriber m_joint_state_sub;
     tf2_ros::TransformBroadcaster m_tf_broadcaster;

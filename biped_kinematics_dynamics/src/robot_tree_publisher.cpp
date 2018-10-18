@@ -12,11 +12,7 @@ RobotTreePublisher::RobotTreePublisher(const std::shared_ptr<RobotTree>& tree_pt
     /*
     ros::NodeHandle n("~");
     
-    n.param("publish_rate", m_publish_rate, 100.0f);
-    std::string joint_state_topic;
-    n.param<std::string>("joint_state_topic", joint_state_topic, "joint_states");
-    
-    m_joint_state_sub = n.subscribe(joint_state_topic, 1, &RobotTreePublisher::callbackJointState, this);
+    m_joint_state_sub = n.subscribe("joint_states", 1, &RobotTreePublisher::callbackJointState, this);
     */
 }
 
@@ -57,8 +53,8 @@ void RobotTreePublisher::publishTransforms()
         //
         tf.transform.rotation.w = joint_quat.w();
         tf.transform.rotation.x = joint_quat.vec()(0);
-        tf.transform.rotation.y = joint_quat.vec()(0);
-        tf.transform.rotation.z = joint_quat.vec()(0);
+        tf.transform.rotation.y = joint_quat.vec()(1);
+        tf.transform.rotation.z = joint_quat.vec()(2);
         transforms.push_back(tf);
     }
     
