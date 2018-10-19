@@ -64,10 +64,10 @@ void RobotTreePublisher::callbackJointState(const sensor_msgs::JointState::Const
                 ROS_ERROR("Invalid joint axis for joint %s", joint_name.c_str());
                 continue;
             }
-            
-            joint_quat = Eigen::AngleAxisf(roll, Eigen::Vector3f::UnitX()) *
+    
+            joint_quat = Eigen::AngleAxisf(yaw, Eigen::Vector3f::UnitZ()) *
                          Eigen::AngleAxisf(pitch, Eigen::Vector3f::UnitY()) *
-                         Eigen::AngleAxisf(yaw, Eigen::Vector3f::UnitZ());
+                         Eigen::AngleAxisf(roll, Eigen::Vector3f::UnitX());
             joint_ptr->setParentToJointQuat(joint_quat);
         }
     }

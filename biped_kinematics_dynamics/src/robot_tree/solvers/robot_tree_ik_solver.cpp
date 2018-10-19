@@ -16,9 +16,9 @@ RobotTreeIKSolver::~RobotTreeIKSolver()
 
 }
 
-void RobotTreeIKSolver::cartesianToJoint(const std::string& link_name, Eigen::Vector3f target_pos, Eigen::Quaternionf target_rot)
+void RobotTreeIKSolver::cartesianToJoint(const std::string& start_link_name, Eigen::Vector3f target_pos, Eigen::Quaternionf target_rot)
 {
-    auto ankle_link = m_robot_tree_ptr->findLink(link_name);
+    auto ankle_link = m_robot_tree_ptr->findLink(start_link_name);
     
     if (!ankle_link) {
         ROS_ERROR("ankle link not found");
