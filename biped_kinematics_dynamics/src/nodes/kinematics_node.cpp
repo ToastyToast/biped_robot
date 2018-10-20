@@ -38,6 +38,8 @@ int main(int argc, char** argv)
         RobotTreeIKSolver ik_solver(robot_tree);
         ik_solver.cartesianToJoint("r_ankle", target_pos, target_rot);
         
+        SO3 to_ankle = robot_tree->calculateFKFromToJoint("l_pelvis_yaw", "l_ankle_fixed");
+        
         RobotTreePublisher treePublisher(robot_tree);
         while (nh.ok()) {
             treePublisher.update();

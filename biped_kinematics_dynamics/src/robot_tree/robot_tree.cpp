@@ -26,6 +26,24 @@ RobotTree::~RobotTree()
 
 }
 
+SO3 RobotTree::calculateFKFromToJoint(const std::string& start_joint, const std::string& target_joint)
+{
+    RobotJoint::Ptr start_joint_ptr = findJoint(start_joint);
+    RobotJoint::Ptr target_joint_ptr = findJoint(target_joint);
+    
+    SO3 transform_to_target;
+    
+    if (!start_joint_ptr && !target_joint_ptr) {
+        throw std::runtime_error{"Start or target joint doesn't exist to calculate FK"};
+    }
+    
+    while (start_joint_ptr) {
+        start_joint_ptr = nullptr;
+    }
+    
+    return transform_to_target;
+}
+
 RobotLink::Ptr RobotTree::getRootLink() const
 {
     return m_root_link;

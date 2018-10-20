@@ -9,6 +9,7 @@
 
 #include "biped_kinematics_dynamics/robot_tree/robot_link.h"
 #include "biped_kinematics_dynamics/robot_tree/robot_joint.h"
+#include "biped_kinematics_dynamics/math/lie_groups.h"
 
 namespace biped_kinematics_dynamics {
 
@@ -20,6 +21,8 @@ public:
     explicit RobotTree(const std::string& robot_model_description);
     explicit RobotTree(const urdf::Model& urdf_model);
     ~RobotTree();
+    
+    SO3 calculateFKFromToJoint(const std::string& start_joint, const std::string& target_joint);
     
     RobotLink::Ptr getRootLink() const;
     
