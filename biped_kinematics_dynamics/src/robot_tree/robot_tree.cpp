@@ -33,7 +33,7 @@ SO3 RobotTree::calculateFKFromToJoint(const std::string& start_joint, const std:
     
     SO3 transform_to_target;
     
-    if (!start_joint_ptr && !target_joint_ptr) {
+    if (!start_joint_ptr || !target_joint_ptr) {
         throw std::runtime_error{"Start or target joint doesn't exist to calculate FK"};
     }
     
