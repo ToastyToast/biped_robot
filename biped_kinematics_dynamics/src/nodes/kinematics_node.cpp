@@ -38,12 +38,23 @@ int main(int argc, char** argv)
         RobotTreeIKSolver ik_solver(robot_tree);
         ik_solver.cartesianToJoint("r_ankle", target_pos, target_rot);
         
-        SO3 to_ankle = robot_tree->calculateFKFromToJoint("l_pelvis_yaw", "l_ankle_fixed");
+        ros::Time last_time = ros::Time::now();
         
         RobotTreePublisher treePublisher(robot_tree);
         while (nh.ok()) {
             treePublisher.update();
             ros::spinOnce();
+            
+            if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
+                SE3 to_ankle = robot_tree->calculateFKPelvisToJoint("l_ankle_fixed");
+                std::cout << "=================" << '\n';
+                std::cout << to_ankle.pos << '\n';
+                std::cout << '\n';
+                std::cout << to_ankle.rot.vec() << '\n';
+                std::cout << to_ankle.rot.w() << '\n';
+                last_time = ros::Time::now();
+            }
+            
         }
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;

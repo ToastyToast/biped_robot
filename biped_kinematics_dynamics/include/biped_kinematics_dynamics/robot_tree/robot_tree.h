@@ -22,7 +22,7 @@ public:
     explicit RobotTree(const urdf::Model& urdf_model);
     ~RobotTree();
     
-    SO3 calculateFKFromToJoint(const std::string& start_joint, const std::string& target_joint);
+    SE3 calculateFKPelvisToJoint(const std::string& target_joint);
     
     RobotLink::Ptr getRootLink() const;
     

@@ -26,22 +26,29 @@ RobotTree::~RobotTree()
 
 }
 
-SO3 RobotTree::calculateFKFromToJoint(const std::string& start_joint, const std::string& target_joint)
+SE3 RobotTree::calculateFKPelvisToJoint(const std::string& target_joint)
 {
-    RobotJoint::Ptr start_joint_ptr = findJoint(start_joint);
     RobotJoint::Ptr target_joint_ptr = findJoint(target_joint);
     
-    SO3 transform_to_target;
+    SE3 pelvis_to_target;
     
-    if (!start_joint_ptr || !target_joint_ptr) {
-        throw std::runtime_error{"Start or target joint doesn't exist to calculate FK"};
+    if (!target_joint_ptr) {
+        throw std::runtime_error{"Target joint doesn't exist to calculate FK"};
     }
     
-    while (start_joint_ptr) {
-        start_joint_ptr = nullptr;
+    auto joint_ptr = target_joint_ptr;
+    while (joint_ptr) {
+        Eigen::Vector3f joint_trans = joint_ptr->getParentToJointTrans();
+        Eigen::Quaternionf joint_quat = joint_ptr->getParentToJointQuat();
+        
+        pelvis_to_target.rot = joint_quat * pelvis_to_target.rot;
+        pelvis_to_target.pos = joint_quat * pelvis_to_target.pos + joint_trans;
+        
+        auto link = findLink(joint_ptr->getParentLinkName());
+        joint_ptr = link->getParentJoint();
     }
     
-    return transform_to_target;
+    return pelvis_to_target;
 }
 
 RobotLink::Ptr RobotTree::getRootLink() const
