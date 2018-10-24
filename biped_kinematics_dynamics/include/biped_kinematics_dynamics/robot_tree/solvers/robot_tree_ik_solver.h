@@ -10,7 +10,8 @@ public:
     RobotTreeIKSolver(const std::shared_ptr<RobotTree>& tree_ptr);
     ~RobotTreeIKSolver();
     
-    void cartesianToJoint(const std::string& start_link_name, Eigen::Vector3f target_pos, Eigen::Quaternionf target_rot);
+    void cartesianToJoint(const std::string& start_link_name, const Eigen::Vector3f& target_pos,
+                          const Eigen::Quaternionf& target_rot);
 private:
     std::shared_ptr<RobotTree> m_robot_tree_ptr {nullptr};
 };
