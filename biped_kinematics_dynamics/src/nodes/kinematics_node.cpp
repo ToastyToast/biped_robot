@@ -46,7 +46,7 @@ int main(int argc, char** argv)
             ros::spinOnce();
             
             if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
-                SE3 to_ankle = robot_tree->calculateFKPelvisToJoint("l_ankle_fixed");
+                SE3 to_ankle = robot_tree->calculateFKRootToJoint("l_ankle_fixed");
                 std::cout << "=================" << '\n';
                 std::cout << to_ankle.pos << '\n';
                 std::cout << '\n';

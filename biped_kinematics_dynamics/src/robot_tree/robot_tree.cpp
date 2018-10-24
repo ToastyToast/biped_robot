@@ -26,7 +26,7 @@ RobotTree::~RobotTree()
 
 }
 
-SE3 RobotTree::calculateFKPelvisToJoint(const std::string& target_joint)
+SE3 RobotTree::calculateFKRootToJoint(const std::string& target_joint)
 {
     RobotJoint::Ptr target_joint_ptr = findJoint(target_joint);
     
