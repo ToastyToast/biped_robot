@@ -10,7 +10,7 @@ void printUntilRoot(const RobotLink::Ptr& link);
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "kinematics_node");
+    ros::init(argc, argv, "biped_kinematics_node");
     ros::NodeHandle nh("");
 
     urdf::Model robot_model;
