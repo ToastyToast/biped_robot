@@ -36,6 +36,7 @@ set(${PROJECT_NAME}_LIBRARIES
         )
 
 set(${PROJECT_NAME}_SRC
+        include/biped_kinematics_dynamics/math/lie_groups.h
         include/biped_kinematics_dynamics/robot_tree/robot_tree.h
         src/robot_tree/robot_tree.cpp
         include/biped_kinematics_dynamics/robot_tree/robot_link.h
@@ -44,9 +45,10 @@ set(${PROJECT_NAME}_SRC
         src/robot_tree/robot_joint.cpp
         include/biped_kinematics_dynamics/robot_tree_publisher.h
         src/robot_tree_publisher.cpp
-        include/biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver.h
-        src/robot_tree/solvers/robot_tree_ik_solver.cpp
-        include/biped_kinematics_dynamics/math/lie_groups.h)
+        include/biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_analytical.h
+        src/robot_tree/solvers/robot_tree_ik_solver_analytical.cpp
+        include/biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_numerical.h
+        src/robot_tree/solvers/robot_tree_ik_solver_numerical.cpp)
 
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})

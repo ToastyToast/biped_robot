@@ -2,7 +2,8 @@
 
 #include "biped_kinematics_dynamics/robot_tree/robot_tree.h"
 #include "biped_kinematics_dynamics/robot_tree_publisher.h"
-#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver.h"
+#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_analytical.h"
+#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_numerical.h"
 
 using namespace biped_kinematics_dynamics;
 
@@ -31,13 +32,17 @@ int main(int argc, char** argv)
         printUntilRoot(robot_link);
         std::cout << '\n';
         
-        ROS_INFO("Starting kinematics_node");
+        ROS_INFO("Starting biped_kinematics_node");
         
         Eigen::Vector3f target_pos(0.0f, 0.0f, 0.0f);
         Eigen::Quaternionf target_rot(1.0f, 0.0f, 0.0f, 0.0f);
-        RobotTreeIKSolver ik_solver(robot_tree);
+        
+        RobotTreeIKSolverAnalytical ik_solver(robot_tree);
         ik_solver.cartesianToJoint("r_ankle", target_pos, target_rot);
         
+        RobotTreeIKSolverNumerical ik_solver_numerical(robot_tree);
+        ik_solver_numerical.cartesianToJoint("r_ankle", target_pos, target_rot);
+    
         ros::Time last_time = ros::Time::now();
         
         RobotTreePublisher treePublisher(robot_tree);
