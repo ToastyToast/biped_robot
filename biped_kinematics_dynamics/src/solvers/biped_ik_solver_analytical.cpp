@@ -1,9 +1,9 @@
-#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_analytical.h"
+#include "biped_kinematics_dynamics/solvers/biped_ik_solver_analytical.h"
 
 using namespace biped_kinematics_dynamics;
 
 
-RobotTreeIKSolverAnalytical::RobotTreeIKSolverAnalytical(const std::shared_ptr<RobotTree>& tree_ptr)
+BipedIKSolverAnalytical::BipedIKSolverAnalytical(const std::shared_ptr<RobotTree>& tree_ptr)
     : m_robot_tree_ptr(tree_ptr)
 {
     if (!tree_ptr) {
@@ -11,12 +11,12 @@ RobotTreeIKSolverAnalytical::RobotTreeIKSolverAnalytical(const std::shared_ptr<R
     }
 }
 
-RobotTreeIKSolverAnalytical::~RobotTreeIKSolverAnalytical()
+BipedIKSolverAnalytical::~BipedIKSolverAnalytical()
 {
 
 }
 
-void RobotTreeIKSolverAnalytical::cartesianToJoint(const std::string& start_link_name, const Eigen::Vector3f& target_pos,
+void BipedIKSolverAnalytical::cartesianToJoint(const std::string& start_link_name, const Eigen::Vector3f& target_pos,
                                          const Eigen::Quaternionf& target_rot)
 {
     auto ankle_link = m_robot_tree_ptr->findLink(start_link_name);

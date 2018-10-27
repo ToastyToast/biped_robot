@@ -2,8 +2,8 @@
 
 #include "biped_kinematics_dynamics/robot_tree/robot_tree.h"
 #include "biped_kinematics_dynamics/robot_tree_publisher.h"
-#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_analytical.h"
-#include "biped_kinematics_dynamics/robot_tree/solvers/robot_tree_ik_solver_numerical.h"
+#include "biped_kinematics_dynamics/solvers/biped_ik_solver_analytical.h"
+#include "biped_kinematics_dynamics/solvers/biped_ik_solver_numerical.h"
 
 using namespace biped_kinematics_dynamics;
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
             
             if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
                 std::cout << "========= IK" << '\n';
-                RobotTreeIKSolverAnalytical ik_solver(robot_tree);
+                BipedIKSolverAnalytical ik_solver(robot_tree);
                 ik_solver.cartesianToJoint("l_ankle", target_pos, target_rot);
                 
                 last_time = ros::Time::now();
