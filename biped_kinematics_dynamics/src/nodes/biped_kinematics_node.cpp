@@ -37,12 +37,6 @@ int main(int argc, char** argv)
         Eigen::Vector3f target_pos(0.0f, 0.0f, 0.0f);
         Eigen::Quaternionf target_rot(1.0f, 0.0f, 0.0f, 0.0f);
         
-        RobotTreeIKSolverAnalytical ik_solver(robot_tree);
-        ik_solver.cartesianToJoint("r_ankle", target_pos, target_rot);
-        
-        RobotTreeIKSolverNumerical ik_solver_numerical(robot_tree);
-        ik_solver_numerical.cartesianToJoint("r_ankle", target_pos, target_rot);
-    
         ros::Time last_time = ros::Time::now();
         
         RobotTreePublisher treePublisher(robot_tree);
@@ -51,12 +45,10 @@ int main(int argc, char** argv)
             ros::spinOnce();
             
             if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
-                SE3 to_ankle = robot_tree->calculateFKRootToJoint("l_ankle_fixed");
-                std::cout << "=================" << '\n';
-                std::cout << to_ankle.pos << '\n';
-                std::cout << '\n';
-                std::cout << to_ankle.rot.vec() << '\n';
-                std::cout << to_ankle.rot.w() << '\n';
+                std::cout << "========= IK" << '\n';
+                RobotTreeIKSolverAnalytical ik_solver(robot_tree);
+                ik_solver.cartesianToJoint("l_ankle", target_pos, target_rot);
+                
                 last_time = ros::Time::now();
             }
             
