@@ -15,8 +15,7 @@ BipedIKSolverNumerical::~BipedIKSolverNumerical()
 
 }
 
-void BipedIKSolverNumerical::cartesianToJoint(const std::string& start_link_name, const Eigen::Vector3f& target_pos,
-                                         const Eigen::Quaternionf& target_rot)
+void BipedIKSolverNumerical::cartesianToJoint(const std::string& target_link_name, const Eigen::Vector3f& target_pos)
 {
     std::cout << "Numerical IK solver" << '\n';
 }

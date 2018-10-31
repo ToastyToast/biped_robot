@@ -16,10 +16,9 @@ BipedIKSolverAnalytical::~BipedIKSolverAnalytical()
 
 }
 
-void BipedIKSolverAnalytical::cartesianToJoint(const std::string& start_link_name, const Eigen::Vector3f& target_pos,
-                                         const Eigen::Quaternionf& target_rot)
+void BipedIKSolverAnalytical::cartesianToJoint(const std::string& target_link_name, const Eigen::Vector3f& target_pos)
 {
-    auto ankle_link = m_robot_tree_ptr->findLink(start_link_name);
+    auto ankle_link = m_robot_tree_ptr->findLink(target_link_name);
     if (!ankle_link) {
         throw std::runtime_error{"ankle link not found"};
     }
