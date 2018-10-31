@@ -39,8 +39,16 @@ void BipedIKSolverAnalytical::cartesianToJoint(const std::string& target_link_na
     }
     
     std::string pelvis_yaw_name = prefix + "pelvis_yaw";
-    SE3 base_to_pelvis = m_robot_tree_ptr->calculateFKRootToJoint(pelvis_yaw_name);
-    SE3 base_to_ankle = m_robot_tree_ptr->calculateFKRootToJoint(ankle_link_joint->getJointName());
+    SE3 base_to_pelvis;
+    SE3 base_to_ankle;
+    try {
+        base_to_pelvis = m_robot_tree_ptr->calculateFKRootToJoint(pelvis_yaw_name);
+        base_to_ankle = m_robot_tree_ptr->calculateFKRootToJoint(ankle_link_joint->getJointName());
+    } catch (const std::runtime_error& err) {
+        std::stringstream ss;
+        ss << "IK error: " << err.what();
+        throw std::runtime_error{ss.str()};
+    }
     
     SE3 pelvis_to_ankle;
     Eigen::Quaternionf inv_rot = base_to_pelvis.rot.inverse();
