@@ -34,7 +34,9 @@ int main(int argc, char** argv)
         
         ROS_INFO("Starting biped_kinematics_node");
         
-        Eigen::Vector3f target_pos(0.0f, 0.0f, 0.0f);
+        Eigen::Vector3f target_pos(0.3f, 0.0f, -0.8f);
+        SE3 target_transform;
+        target_transform.pos = Eigen::Vector3f(0.3f, 0.0f, -0.8f);
         
         ros::Time last_time = ros::Time::now();
         
@@ -46,7 +48,7 @@ int main(int argc, char** argv)
             if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
                 std::cout << "========= IK" << '\n';
                 BipedIKSolverAnalytical ik_solver(robot_tree);
-                ik_solver.cartesianToJoint("l_ankle", target_pos);
+                ik_solver.cartesianToJoint("l_ankle", target_transform);
                 
                 last_time = ros::Time::now();
             }

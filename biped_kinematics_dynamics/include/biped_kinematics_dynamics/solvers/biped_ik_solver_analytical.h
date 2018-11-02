@@ -10,7 +10,7 @@ public:
     BipedIKSolverAnalytical(const std::shared_ptr<RobotTree>& tree_ptr);
     ~BipedIKSolverAnalytical();
     
-    void cartesianToJoint(const std::string& target_link_name, const Eigen::Vector3f& target_pos);
+    void cartesianToJoint(const std::string& target_link_name, const SE3& target_transform);
 private:
     std::shared_ptr<RobotTree> m_robot_tree_ptr {nullptr};
 };
