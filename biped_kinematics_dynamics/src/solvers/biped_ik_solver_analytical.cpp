@@ -55,7 +55,7 @@ void BipedIKSolverAnalytical::cartesianToJoint(const std::string& target_link_na
     pelvis_to_ankle.rot = inv_rot * base_to_ankle.rot;
     pelvis_to_ankle.pos = inv_rot * base_to_ankle.pos - inv_rot * base_to_pelvis.pos;
     
-    Eigen::Vector3f r_ankle_to_pelvis = pelvis_to_ankle.rot.inverse() * (-pelvis_to_ankle.pos);
+    Eigen::Vector3f r_ankle_to_pelvis = target_transform.rot.inverse() * (-target_transform.pos);
     
     std::cout << "Ankle to pelvis distance" << '\n';
     std::cout << r_ankle_to_pelvis << '\n';
@@ -64,7 +64,14 @@ void BipedIKSolverAnalytical::cartesianToJoint(const std::string& target_link_na
     float A = 0.5f, B = 0.5f;
     float C = r_ankle_to_pelvis.norm();
     
-    float knee_pitch = M_PI - std::acos((A*A + B*B - C*C) / (2.0f * A * B));
+    float acos_term = (A*A + B*B - C*C) / (2.0f * A * B);
+    
+    if (acos_term > 1.0f) {
+        acos_term = 1.0f;
+    } else if (acos_term < -1.0f) {
+        acos_term = -1.0f;
+    }
+    float knee_pitch = M_PI - std::acos(acos_term);
     
     float alpha = std::asin(A*std::sin(M_PI - knee_pitch) / C);
     
@@ -94,7 +101,7 @@ void BipedIKSolverAnalytical::cartesianToJoint(const std::string& target_link_na
         knee_pitch, Eigen::Vector3f(0, 1, 0)
         );
     
-    Eigen::Quaternionf ankle_to_knee_quat = base_to_ankle.rot *
+    Eigen::Quaternionf ankle_to_knee_quat = target_transform.rot *
         ankle_roll_rot.inverse() *
         ankle_pitch_rot.inverse() *
         knee_pitch_rot.inverse();

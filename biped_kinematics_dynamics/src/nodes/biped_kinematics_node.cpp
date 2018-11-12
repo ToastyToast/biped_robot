@@ -34,9 +34,9 @@ int main(int argc, char** argv)
         
         ROS_INFO("Starting biped_kinematics_node");
         
-        Eigen::Vector3f target_pos(0.3f, 0.0f, -0.8f);
         SE3 target_transform;
-        target_transform.pos = Eigen::Vector3f(0.3f, 0.0f, -0.8f);
+        target_transform.pos = Eigen::Vector3f(0.3f, 0.5f, -0.8);
+        target_transform.rot = Eigen::AngleAxisf(-0.3f, Eigen::Vector3f::UnitX());
         
         ros::Time last_time = ros::Time::now();
         
