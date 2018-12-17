@@ -1,0 +1,5 @@
+<launch>
+    <rosparam file="$(find biped_control)/config/biped_control.yaml" command="load"/>
+
+
+</launch>
