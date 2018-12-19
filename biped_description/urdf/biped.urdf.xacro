@@ -33,11 +33,17 @@
         <link name="${prefix}_pelvis_pitch_link">
             <visual>
                 <origin xyz="0 0 -0.25"/>
+                <material name="blue"/>
                 <geometry>
                     <cylinder radius="0.02" length="0.5" />
                 </geometry>
-                <material name="blue"/>
             </visual>
+            <collision>
+                <origin xyz="0 0 -0.25"/>
+                <geometry>
+                    <cylinder radius="0.02" length="0.5"/>
+                </geometry>
+            </collision>
         </link>
 
         <joint name="${prefix}_pelvis_yaw" type="revolute">
@@ -72,6 +78,12 @@
                 </geometry>
                 <material name="red"/>
             </visual>
+            <collision>
+                <origin xyz="0 0 -0.25"/>
+                <geometry>
+                    <cylinder radius="0.02" length="0.5" />
+                </geometry>
+            </collision>
         </link>
 
         <joint name="${prefix}_knee_pitch" type="revolute">
@@ -101,6 +113,12 @@
                 </geometry>
                 <material name="green" />
             </visual>
+            <collision>
+                <origin xyz="0.075 0 -0.02"/>
+                <geometry>
+                    <box size="0.3 0.1 0.02" />
+                </geometry>
+            </collision>
         </link>
 
         <joint name="${prefix}_ankle_roll" type="revolute">
