@@ -1,24 +1,37 @@
 <launch>
+    <arg name="paused" default="false" />
+    <arg name="use_sim_time" default="true" />
+    <arg name="gui" default="true" />
+    <arg name="headless" default="false" />
+    <arg name="debug" default="false" />
     <arg name="model" default="$(find biped_description)/urdf/biped.urdf.xacro" />
-    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="worlds/empty.world" />
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)" />
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+        <arg name="headless" value="$(arg headless)" />
     </include>
 
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
-          args="-x 0.0 -y 0.0 -z 1.05 -urdf -model biped -param robot_description"
+          args="-x 0.0 -y 0.0 -z 0.05 -unpause -urdf -model biped -param robot_description"
+          respawn="false"
           output="screen"/>
+
+    <rosparam command="load" file="$(find biped_gazebo)/config/biped_control.yaml"/>
+
+    <node name="biped_controller_spawner" pkg="controller_manager"
+          type="spawner" output="screen" ns="biped"
+          args="l_pelvis_yaw_controller l_pelvis_roll_controller l_pelvis_pitch_controller l_knee_pitch_controller l_ankle_pitch_controller l_ankle_roll_controller
+                r_pelvis_yaw_controller r_pelvis_roll_controller r_pelvis_pitch_controller r_knee_pitch_controller r_ankle_pitch_controller r_ankle_roll_controller"
+    />
 
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
         <param name="publish_frequency" type="double" value="60.0"/>
+        <remap from="/joint_states" to="/biped/joint_states" />
     </node>
-
-    <rosparam command="load"
-              file="$(find biped_gazebo)/config/biped_control.yaml"
-              ns="biped_controller"
-    />
-
-    <node name="biped_controller_spawner" pkg="controller_manager"
-          type="spawner" args="biped_controller"></node>
 </launch>
