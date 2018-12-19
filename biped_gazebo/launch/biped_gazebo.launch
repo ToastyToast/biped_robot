@@ -9,4 +9,16 @@
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
           args="-x 0.0 -y 0.0 -z 1.05 -urdf -model biped -param robot_description"
           output="screen"/>
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="60.0"/>
+    </node>
+
+    <rosparam command="load"
+              file="$(find biped_gazebo)/config/biped_control.yaml"
+              ns="biped_controller"
+    />
+
+    <node name="biped_controller_spawner" pkg="controller_manager"
+          type="spawner" args="biped_controller"></node>
 </launch>
