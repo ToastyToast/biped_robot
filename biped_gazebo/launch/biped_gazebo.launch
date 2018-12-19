@@ -7,6 +7,6 @@
     </include>
 
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
-          args="-x 0.0 -y 0.0 -z 0.8 -urdf -model biped -param robot_description"
+          args="-x 0.0 -y 0.0 -z 1.05 -urdf -model biped -param robot_description"
           output="screen"/>
 </launch>
