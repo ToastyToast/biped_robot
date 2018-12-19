@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="biped">
+<robot name="biped" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <material name="red">
         <color rgba="0.8 0 0 1"/>
     </material>
@@ -24,10 +24,25 @@
         <inertial>
             <mass value="0.0" />
             <inertia
-                    ixx="0.0" ixy="0.0" ixz="0.0"
-                    iyy="0.0" iyz="0.0"
-                    izz="0.0" />
+                    ixx="1.0" ixy="0.0" ixz="0.0"
+                    iyy="1.0" iyz="0.0"
+                    izz="1.0" />
         </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="empty_gazebo_link" params="">
+        <visual>
+            <geometry>
+                <box size="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+        <xacro:empty_inertial />
     </xacro:macro>
 
     <xacro:macro name="cylinder_inertial" params="r l m">
@@ -50,26 +65,40 @@
         </inertial>
     </xacro:macro>
 
-    <link name="base_footprint">
-        <xacro:empty_inertial />
-    </link>
     <link name="base_link">
-        <xacro:empty_inertial />
+        <xacro:empty_gazebo_link />
     </link>
 
-    <joint name="footprint_fixed" type="fixed">
+    <link name="waist_link">
+        <xacro:empty_gazebo_link />
+    </link>
+
+    <joint name="base_fixed" type="fixed">
+        <parent link="base_link" />
+        <child link="waist_link" />
         <origin xyz="0 0 1.0" />
-        <parent link="base_footprint" />
-        <child link="base_link" />
     </joint>
+
+    <xacro:macro name="revolute_transmission" params="joint_name reduction">
+        <transmission name="${joint_name}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${joint_name}_motor">
+                <mechanicalReduction>${reduction}</mechanicalReduction>
+            </actuator>
+            <joint name="${joint_name}">
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+        </transmission>
+    </xacro:macro>
+
 
     <xacro:macro name="biped_leg" params="parent_link prefix reflect">
         <link name="${prefix}_pelvis_yaw_link">
-            <xacro:empty_inertial />
+            <xacro:empty_gazebo_link />
         </link>
 
         <link name="${prefix}_pelvis_roll_link">
-            <xacro:empty_inertial />
+            <xacro:empty_gazebo_link />
         </link>
 
         <link name="${prefix}_pelvis_pitch_link">
@@ -90,27 +119,28 @@
         </link>
 
         <joint name="${prefix}_pelvis_yaw" type="revolute">
-            <axis xyz="0 0 1" />
-            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.00" />
-            <origin xyz="0 ${reflect*0.25} 0" rpy="0 0 0" />
             <parent link="${parent_link}" />
             <child link="${prefix}_pelvis_yaw_link" />
+            <axis xyz="0 0 1" />
+            <origin xyz="0 ${reflect*0.25} 0" rpy="0 0 0" />
+            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.00" />
         </joint>
 
+
         <joint name="${prefix}_pelvis_roll" type="revolute">
-            <axis xyz="1 0 0" />
-            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <parent link="${prefix}_pelvis_yaw_link" />
             <child link="${prefix}_pelvis_roll_link" />
+            <axis xyz="1 0 0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
         </joint>
 
         <joint name="${prefix}_pelvis_pitch" type="revolute">
-            <axis xyz="0 1 0" />
-            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <parent link="${prefix}_pelvis_roll_link" />
             <child link="${prefix}_pelvis_pitch_link" />
+            <axis xyz="0 1 0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
         </joint>
 
         <link name="${prefix}_knee_pitch_link">
@@ -131,24 +161,16 @@
         </link>
 
         <joint name="${prefix}_knee_pitch" type="revolute">
-            <axis xyz="0 1 0" />
-            <limit effort="10.0" lower="0" upper="${pi/2}" velocity="5.0" />
-            <origin xyz="0 0 -0.5" rpy="0 0 0" />
             <parent link="${prefix}_pelvis_pitch_link" />
             <child link="${prefix}_knee_pitch_link" />
+            <axis xyz="0 1 0" />
+            <origin xyz="0 0 -0.5" rpy="0 0 0" />
+            <limit effort="10.0" lower="0" upper="${pi/2}" velocity="5.0" />
         </joint>
 
         <link name="${prefix}_ankle_pitch_link">
-            <xacro:empty_inertial />
+            <xacro:empty_gazebo_link />
         </link>
-
-        <joint name="${prefix}_ankle_pitch" type="revolute">
-            <axis xyz="0 1 0" />
-            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-            <origin xyz="0 0 -0.5" rpy="0 0 0" />
-            <parent link="${prefix}_knee_pitch_link" />
-            <child link="${prefix}_ankle_pitch_link" />
-        </joint>
 
         <link name="${prefix}_ankle_roll_link">
             <visual>
@@ -167,23 +189,37 @@
             <xacro:box_inertial w="0.3" h="0.1" d="0.02" m="0.1"/>
         </link>
 
-        <joint name="${prefix}_ankle_roll" type="revolute">
-            <axis xyz="1 0 0" />
+        <joint name="${prefix}_ankle_pitch" type="revolute">
+            <parent link="${prefix}_knee_pitch_link" />
+            <child link="${prefix}_ankle_pitch_link" />
+            <axis xyz="0 1 0" />
+            <origin xyz="0 0 -0.5" rpy="0 0 0" />
             <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
-            <origin xyz="0 0 0" rpy="0 0 0" />
+        </joint>
+
+        <joint name="${prefix}_ankle_roll" type="revolute">
             <parent link="${prefix}_ankle_pitch_link" />
             <child link="${prefix}_ankle_roll_link" />
+            <axis xyz="1 0 0" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <limit effort="10.0" lower="-${pi/3}" upper="${pi/3}" velocity="5.0" />
         </joint>
 
         <link name="${prefix}_ankle">
-            <xacro:empty_inertial />
+            <xacro:empty_gazebo_link />
         </link>
 
         <joint name="${prefix}_ankle_fixed" type="fixed">
-            <origin xyz="0 0 0" rpy="0 0 0" />
             <parent link="${prefix}_ankle_roll_link" />
             <child link="${prefix}_ankle" />
         </joint>
+
+        <xacro:revolute_transmission joint_name="${prefix}_pelvis_yaw" reduction="1" />
+        <xacro:revolute_transmission joint_name="${prefix}_pelvis_roll" reduction="1" />
+        <xacro:revolute_transmission joint_name="${prefix}_pelvis_pitch" reduction="1" />
+        <xacro:revolute_transmission joint_name="${prefix}_knee_pitch" reduction="1" />
+        <xacro:revolute_transmission joint_name="${prefix}_ankle_pitch" reduction="1" />
+        <xacro:revolute_transmission joint_name="${prefix}_ankle_roll" reduction="1" />
     </xacro:macro>
 
     <xacro:macro name="biped_left_leg" params="parent_link">
@@ -194,8 +230,8 @@
         <xacro:biped_leg prefix="r" parent_link="${parent_link}" reflect="-1" />
     </xacro:macro>
 
-    <xacro:biped_left_leg parent_link="base_link" />
-    <xacro:biped_right_leg parent_link="base_link" />
+    <xacro:biped_left_leg parent_link="waist_link" />
+    <xacro:biped_right_leg parent_link="waist_link" />
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
