@@ -35,7 +35,7 @@ int main(int argc, char** argv)
         std::cout << '\n';
         
         SE3 target_transform;
-        target_transform.pos = Eigen::Vector3f(0.3f, 0.5f, -0.8);
+        target_transform.pos = Eigen::Vector3f(0.3f, -0.5f, -0.8);
         target_transform.rot = Eigen::AngleAxisf(-0.3f, Eigen::Vector3f::UnitX());
         
         ros::Time last_time = ros::Time::now();
@@ -46,9 +46,9 @@ int main(int argc, char** argv)
             ros::spinOnce();
             
             if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
-                std::cout << "========= IK" << '\n';
+                std::cout << "========= IK " << '\n';
                 BipedIKSolverAnalytical ik_solver(robot_tree_ptr);
-                ik_solver.cartesianToJoint("l_ankle", target_transform);
+                ik_solver.cartesianToJoint("r_ankle", target_transform);
                 
                 last_time = ros::Time::now();
             }

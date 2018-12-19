@@ -57,7 +57,7 @@ void BipedIKSolverAnalytical::cartesianToJoint(const std::string& target_link_na
     
     Eigen::Vector3f r_ankle_to_pelvis = target_transform.rot.inverse() * (-target_transform.pos);
     
-    std::cout << "Ankle to pelvis distance" << '\n';
+    std::cout << target_link_name << " to pelvis distance" << '\n';
     std::cout << r_ankle_to_pelvis << '\n';
     
     //TODO: get A, B from RobotTree;
