@@ -13,6 +13,8 @@ int main(int argc, char** argv)
 {
     ros::init(argc, argv, "biped_kinematics_node");
     ros::NodeHandle nh("");
+    
+    ROS_INFO("Starting biped_kinematics_node");
 
     urdf::Model robot_model;
     if (!robot_model.initParam("robot_description")) {
@@ -21,18 +23,16 @@ int main(int argc, char** argv)
     }
     
     try {
-        std::shared_ptr<RobotTree> robot_tree = std::make_shared<RobotTree>(robot_model);
-        std::cout << robot_tree << '\n';
+        std::shared_ptr<RobotTree> robot_tree_ptr = std::make_shared<RobotTree>(robot_model);
+        std::cout << *robot_tree_ptr << '\n';
     
-        auto robot_link = robot_tree->findLink("r_ankle");
+        auto robot_link = robot_tree_ptr->findLink("r_ankle");
         printUntilRoot(robot_link);
         std::cout << '\n';
     
-        robot_link = robot_tree->findLink("l_ankle");
+        robot_link = robot_tree_ptr->findLink("l_ankle");
         printUntilRoot(robot_link);
         std::cout << '\n';
-        
-        ROS_INFO("Starting biped_kinematics_node");
         
         SE3 target_transform;
         target_transform.pos = Eigen::Vector3f(0.3f, 0.5f, -0.8);
@@ -40,14 +40,14 @@ int main(int argc, char** argv)
         
         ros::Time last_time = ros::Time::now();
         
-        RobotTreePublisher treePublisher(robot_tree);
+        RobotTreePublisher treePublisher(robot_tree_ptr);
         while (nh.ok()) {
             treePublisher.update();
             ros::spinOnce();
             
             if ((ros::Time::now() - last_time).toSec() >= 1.0f) {
                 std::cout << "========= IK" << '\n';
-                BipedIKSolverAnalytical ik_solver(robot_tree);
+                BipedIKSolverAnalytical ik_solver(robot_tree_ptr);
                 ik_solver.cartesianToJoint("l_ankle", target_transform);
                 
                 last_time = ros::Time::now();
