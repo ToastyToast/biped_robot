@@ -59,7 +59,7 @@
         <xacro:empty_inertial />
     </link>
 
-    <joint name="footprint_to_waist" type="fixed">
+    <joint name="footprint_fixed" type="fixed">
         <origin xyz="0 0 1.0" />
         <parent link="base_footprint" />
         <child link="base_link" />
