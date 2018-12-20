@@ -1,0 +1,78 @@
+biped:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 60
+
+  l_pelvis_yaw_controller:
+    type: position_controllers/JointPositionController
+    joint: l_pelvis_yaw
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  l_pelvis_roll_controller:
+    type: position_controllers/JointPositionController
+    joint: l_pelvis_roll
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  l_pelvis_pitch_controller:
+    type: position_controllers/JointPositionController
+    joint: l_pelvis_pitch
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  l_knee_pitch_controller:
+    type: position_controllers/JointPositionController
+    joint: l_knee_pitch
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  l_ankle_pitch_controller:
+    type: position_controllers/JointPositionController
+    joint: l_ankle_pitch
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  l_ankle_roll_controller:
+    type: position_controllers/JointPositionController
+    joint: l_ankle_roll
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  r_pelvis_yaw_controller:
+    type: position_controllers/JointPositionController
+    joint: r_pelvis_yaw
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  r_pelvis_roll_controller:
+    type: position_controllers/JointPositionController
+    joint: r_pelvis_roll
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  r_pelvis_pitch_controller:
+    type: position_controllers/JointPositionController
+    joint: r_pelvis_pitch
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  r_knee_pitch_controller:
+    type: position_controllers/JointPositionController
+    joint: r_knee_pitch
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  r_ankle_pitch_controller:
+    type: position_controllers/JointPositionController
+    joint: r_ankle_pitch
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  r_ankle_roll_controller:
+    type: position_controllers/JointPositionController
+    joint: r_ankle_roll
+    pid: {p: 100.0, i: 0.01, d: 0.0}
+
+  gazebo_ros_control/pid_gains:
+    l_pelvis_yaw: {p: 100.0, i: 0.01, d: 0.0}
+    l_pelvis_roll: {p: 100.0, i: 0.01, d: 0.0}
+    l_pelvis_pitch: {p: 100.0, i: 0.01, d: 0.0}
+    l_knee_pitch: {p: 100.0, i: 0.01, d: 0.0}
+    l_ankle_pitch: {p: 100.0, i: 0.01, d: 0.0}
+    l_ankle_roll: {p: 100.0, i: 0.01, d: 0.0}
+    r_pelvis_yaw: {p: 100.0, i: 0.01, d: 0.0}
+    r_pelvis_roll: {p: 100.0, i: 0.01, d: 0.0}
+    r_pelvis_pitch: {p: 100.0, i: 0.01, d: 0.0}
+    r_knee_pitch: {p: 100.0, i: 0.01, d: 0.0}
+    r_ankle_pitch: {p: 100.0, i: 0.01, d: 0.0}
+    r_ankle_roll: {p: 100.0, i: 0.01, d: 0.0}
