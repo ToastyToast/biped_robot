@@ -60,17 +60,39 @@
         </inertial>
     </xacro:macro>
 
-    <link name="base_link">
+    <link name="base_link" />
+
+    <link name="torso_link">
+         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.1 0.7 0.7"/>
+            </geometry>
+            <material name="red" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.1 0.7 0.7"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertial w="0.1" h="0.7" d="0.7" m="2.0" />
     </link>
 
-    <link name="waist_link">
+    <joint name="torso_fixed" type="fixed">
+        <origin xyz="0 0 0.35" rpy="0 0 0" />
+        <parent link="base_link"/>
+        <child link="torso_link" />
+    </joint>
+
+    <link name="imu_link">
         <xacro:empty_gazebo_link />
     </link>
 
-    <joint name="base_fixed" type="fixed">
-        <parent link="base_link" />
-        <child link="waist_link" />
-        <origin xyz="0 0 1.0" />
+    <joint name="imu_fixed" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="torso_link" />
+        <child link="imu_link" />
     </joint>
 
     <xacro:macro name="revolute_transmission" params="joint_name reduction">
@@ -224,13 +246,55 @@
         <xacro:biped_leg prefix="r" parent_link="${parent_link}" reflect="-1" />
     </xacro:macro>
 
-    <xacro:biped_left_leg parent_link="waist_link" />
-    <xacro:biped_right_leg parent_link="waist_link" />
+    <xacro:biped_left_leg parent_link="base_link" />
+    <xacro:biped_right_leg parent_link="base_link" />
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/biped</robotNamespace>
             <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
         </plugin>
+    </gazebo>
+
+    <gazebo reference="l_ankle_roll_link">
+        <material>Gazebo/FlatBlack</material>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
+        <fdir1>1 0 0</fdir1>
+        <maxVel>1.0</maxVel>
+        <minDepth>0.0</minDepth>
+    </gazebo>
+    <gazebo reference="r_ankle_roll_link">
+        <material>Gazebo/FlatBlack</material>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
+        <fdir1>1 0 0</fdir1>
+        <maxVel>1.0</maxVel>
+        <minDepth>0.0</minDepth>
+    </gazebo>
+
+    <gazebo reference="imu_link">
+        <gravity>true</gravity>
+        <sensor name="imu_sensor" type="imu">
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <topic>__default_topic__</topic>
+            <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                <robotNamespace>/biped</robotNamespace>
+                <topicName>imu</topicName>
+                <bodyName>imu_link</bodyName>
+                <updateRateHZ>10</updateRateHZ>
+                <gaussianNoise>0.0</gaussianNoise>
+                <xyzOffset>0 0 0</xyzOffset>
+                <rpyOffset>0 0 0</rpyOffset>
+                <frameName>imu_link</frameName>
+            </plugin>
+            <pose>0 0 0 0 0 0</pose>
+        </sensor>
     </gazebo>
 </robot>
