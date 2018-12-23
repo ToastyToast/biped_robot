@@ -277,6 +277,39 @@
         <minDepth>0.0</minDepth>
     </gazebo>
 
+    <gazebo reference="r_ankle_roll">
+        <provideFeedback>true</provideFeedback>
+    </gazebo>
+
+    <gazebo reference="l_ankle_roll">
+        <provideFeedback>true</provideFeedback>
+    </gazebo>
+
+    <gazebo>
+        <plugin filename="libgazebo_ros_ft_sensor.so" name="r_ft_sensor">
+            <robotNamespace>/biped</robotNamespace>
+            <updateRate>100.0</updateRate>
+            <topicName>r_ankle_ft_sensor</topicName>
+            <jointName>r_ankle_roll</jointName>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.0</stddev>
+            </noise>
+        </plugin>
+        <plugin filename="libgazebo_ros_ft_sensor.so" name="l_ft_sensor">
+            <robotNamespace>/biped</robotNamespace>
+            <updateRate>100.0</updateRate>
+            <topicName>l_ankle_ft_sensor</topicName>
+            <jointName>l_ankle_roll</jointName>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.0</stddev>
+            </noise>
+        </plugin>
+    </gazebo>
+
     <gazebo reference="imu_link">
         <gravity>true</gravity>
         <sensor name="imu_sensor" type="imu">
