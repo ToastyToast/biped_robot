@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /WrenchStamped1
+        - /WrenchStamped2
       Splitter Ratio: 0.5
     Tree Height: 579
   - Class: rviz/Selection
@@ -196,6 +198,22 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
+          l_pelvis_yaw_link:
+            l_pelvis_roll_link:
+              l_pelvis_pitch_link:
+                l_knee_pitch_link:
+                  l_ankle_pitch_link:
+                    l_ankle_roll_link:
+                      l_ankle:
+                        {}
+          r_pelvis_yaw_link:
+            r_pelvis_roll_link:
+              r_pelvis_pitch_link:
+                r_knee_pitch_link:
+                  r_ankle_pitch_link:
+                    r_ankle_roll_link:
+                      r_ankle:
+                        {}
           torso_link:
             imu_link:
               {}
@@ -211,7 +229,7 @@ Visualization Manager:
       History Length: 1
       Name: WrenchStamped
       Topic: /biped/l_ankle_ft_sensor
-      Torque Arrow Scale: 0.5
+      Torque Arrow Scale: 0.25
       Torque Color: 204; 204; 51
       Unreliable: false
       Value: true
@@ -316,10 +334,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5303972363471985
+      Pitch: 0.5603973269462585
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.67677116394043
+      Yaw: 0.48859235644340515
     Saved: ~
 Window Geometry:
   Displays:
@@ -337,5 +355,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1216
-  X: 744
-  Y: 41
+  X: 702
+  Y: 39

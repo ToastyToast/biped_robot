@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>biped_rviz</name>
+    <version>0.0.1</version>
+    <description>
+        biped_rivz
+    </description>
+
+    <license>TODO</license>
+
+    <maintainer email="leon112rus@gmail.com">Artem Kovalev</maintainer>
+
+    <url type="repository">https://github.com/toastytoast/biped</url>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <depend>roscpp</depend>
+    <depend>visualization_msgs</depend>
+    <depend>biped_msgs</depend>
+    <depend>biped_kinematics_dynamics</depend>
+    <depend>biped_control</depend>
+
+    <export>
+    </export>
+</package>

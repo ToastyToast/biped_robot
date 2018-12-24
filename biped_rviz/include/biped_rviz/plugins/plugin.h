@@ -1,0 +1,4 @@
+#ifndef BIPED_RVIZ_PLUGIN_H
+#define BIPED_RVIZ_PLUGIN_H
+
+#endif //BIPED_RVIZ_PLUGIN_H
