@@ -37,14 +37,14 @@ set(${PROJECT_NAME}_LIBRARIES
         )
 
 set(${PROJECT_NAME}_SRC
-    include/biped_control/limp.h
-    src/limp.cpp)
+    include/biped_control/inverted_pendulum.h
+    src/inverted_pendulum.cpp)
 
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
 
-add_executable(limp_test_node src/nodes/limp_test_node.cpp)
-add_dependencies(limp_test_node biped_msgs_generate_messages_cpp)
-target_link_libraries(limp_test_node ${PROJECT_NAME})
+add_executable(inverted_pendulum_test_node src/nodes/inverted_pendulum_test_node.cpp)
+add_dependencies(inverted_pendulum_test_node biped_msgs_generate_messages_cpp)
+target_link_libraries(inverted_pendulum_test_node ${PROJECT_NAME})
