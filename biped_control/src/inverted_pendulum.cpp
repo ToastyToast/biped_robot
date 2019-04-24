@@ -55,73 +55,73 @@ float LIP1D::getTau() {
     return sqrtf(m_height/m_g);
 }
 
-LIP2D::LIP2D(float x_position, float y_position, float x_velocity, float y_velocity)
+LIP3D::LIP3D(float x_position, float y_position, float x_velocity, float y_velocity)
     : m_x_lip(x_position, x_velocity), m_y_lip(y_position, y_velocity)
 {
 }
 
-void LIP2D::integrate(float t) {
+void LIP3D::integrate(float t) {
     m_x_lip.integrate(t);
     m_y_lip.integrate(t);
     m_z_position = calculateZFromPlaneConstraint();
 }
 
-float LIP2D::getXPosition() const {
+float LIP3D::getXPosition() const {
     return m_x_lip.getPosition();
 }
 
-void LIP2D::setXPosition(float x_position) {
+void LIP3D::setXPosition(float x_position) {
     m_x_lip.setPosition(x_position);
 }
 
-float LIP2D::getXVelocity() const {
+float LIP3D::getXVelocity() const {
     return m_x_lip.getVelocity();
 }
 
-void LIP2D::setXVelocity(float x_velocity) {
+void LIP3D::setXVelocity(float x_velocity) {
     m_x_lip.setVelocity(x_velocity);
 }
 
-float LIP2D::getYPosition() const {
+float LIP3D::getYPosition() const {
     return m_y_lip.getPosition();
 }
 
-void LIP2D::setYPosition(float y_position) {
+void LIP3D::setYPosition(float y_position) {
     m_y_lip.setPosition(y_position);
 }
 
-float LIP2D::getYVelocity() const {
+float LIP3D::getYVelocity() const {
     return m_y_lip.getVelocity();
 }
 
-void LIP2D::setYVelocity(float y_velocity) {
+void LIP3D::setYVelocity(float y_velocity) {
     m_y_lip.setVelocity(y_velocity);
 }
 
-float LIP2D::getZPosition() const {
+float LIP3D::getZPosition() const {
     return m_z_position;
 }
 
-float LIP2D::getHeight() const {
+float LIP3D::getHeight() const {
     return m_x_lip.getHeight();
 }
 
-void LIP2D::setHeight(float height) {
+void LIP3D::setHeight(float height) {
     m_x_lip.setHeight(height);
     m_y_lip.setHeight(height);
 }
 
-void LIP2D::setPlaneConstraint(float x_slope, float y_slope, float zc) {
+void LIP3D::setPlaneConstraint(float x_slope, float y_slope, float zc) {
     m_x_slope = x_slope;
     m_y_slope = y_slope;
     setHeight(zc);
 }
 
-float LIP2D::getTau() {
+float LIP3D::getTau() {
     return m_x_lip.getTau();
 }
 
-float LIP2D::calculateZFromPlaneConstraint() const {
+float LIP3D::calculateZFromPlaneConstraint() const {
     float x = m_x_lip.getPosition();
     float y = m_y_lip.getPosition();
     float zc = m_x_lip.getHeight();

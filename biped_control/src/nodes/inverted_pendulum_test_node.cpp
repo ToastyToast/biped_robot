@@ -27,7 +27,7 @@ int main(int argc, char** argv)
     float x_step = 1.0f;
     float step = 0.01f;
     
-    LIP2D lip(0.0f, -0.1f, 0.1f, 0.0f);
+    LIP3D lip(0.0f, -0.1f, 0.1f, 0.0f);
     lip.setPlaneConstraint(0.0f, 0.0f, 1.0f);
     
     std_msgs::Float32 msg;
@@ -39,8 +39,6 @@ int main(int argc, char** argv)
         
         lip.integrate(dt);
         
-        std::cout << lip.getYPosition() << ", " << lip.getYVelocity() << "\n";
-    
         msg.data = lip.getXPosition();
         x_pos_pub.publish(msg);
         

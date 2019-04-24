@@ -29,10 +29,10 @@ private:
     float m_height {1.0f};
 };
 
-class LIP2D {
+class LIP3D {
 public:
-    LIP2D() = default;
-    LIP2D(float x_position, float y_position, float x_velocity=0.0f, float y_velocity=0.0f);
+    LIP3D() = default;
+    LIP3D(float x_position, float y_position, float x_velocity=0.0f, float y_velocity=0.0f);
     
     void integrate(float t);
     
