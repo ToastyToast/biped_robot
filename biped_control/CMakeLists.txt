@@ -39,8 +39,8 @@ set(${PROJECT_NAME}_LIBRARIES
 set(${PROJECT_NAME}_SRC
     include/biped_control/inverted_pendulum.h
     src/inverted_pendulum.cpp
-    include/biped_control/walk_primitive.h
-    src/walk_primitive.cpp)
+    include/biped_control/walk_pattern.h
+    src/walk_pattern.cpp)
 
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})

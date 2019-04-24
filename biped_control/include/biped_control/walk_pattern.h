@@ -5,9 +5,9 @@
 
 namespace biped_control {
 
-class WalkPrimitive2D {
+class WalkPattern {
 public:
-    WalkPrimitive2D() = default;
+    WalkPattern() = default;
 private:
 
 };
