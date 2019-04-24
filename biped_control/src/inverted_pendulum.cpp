@@ -63,6 +63,7 @@ LIP2D::LIP2D(float x_position, float y_position, float x_velocity, float y_veloc
 void LIP2D::integrate(float t) {
     m_x_lip.integrate(t);
     m_y_lip.integrate(t);
+    m_z_position = calculateZFromPlaneConstraint();
 }
 
 float LIP2D::getXPosition() const {
@@ -97,6 +98,10 @@ void LIP2D::setYVelocity(float y_velocity) {
     m_y_lip.setVelocity(y_velocity);
 }
 
+float LIP2D::getZPosition() const {
+    return m_z_position;
+}
+
 float LIP2D::getHeight() const {
     return m_x_lip.getHeight();
 }
@@ -106,6 +111,20 @@ void LIP2D::setHeight(float height) {
     m_y_lip.setHeight(height);
 }
 
+void LIP2D::setPlaneConstraint(float x_slope, float y_slope, float zc) {
+    m_x_slope = x_slope;
+    m_y_slope = y_slope;
+    setHeight(zc);
+}
+
 float LIP2D::getTau() {
     return m_x_lip.getTau();
+}
+
+float LIP2D::calculateZFromPlaneConstraint() const {
+    float x = m_x_lip.getPosition();
+    float y = m_y_lip.getPosition();
+    float zc = m_x_lip.getHeight();
+    
+    return m_x_slope * x + m_y_slope * y + zc;
 }

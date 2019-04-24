@@ -48,12 +48,20 @@ public:
     float getYVelocity() const;
     void setYVelocity(float y_velocity);
     
+    float getZPosition() const;
+    
     float getHeight() const;
     void setHeight(float height);
     
+    void setPlaneConstraint(float x_slope, float y_slope, float zc);
+    
     float getTau();
 private:
+    float calculateZFromPlaneConstraint() const;
+    
     LIP1D m_x_lip, m_y_lip;
+    float m_x_slope {0.0f}, m_y_slope {0.0f};
+    float m_z_position {m_x_lip.getHeight()};
 };
 
 }
