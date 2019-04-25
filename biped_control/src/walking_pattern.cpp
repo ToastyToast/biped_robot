@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "biped_control/walk_pattern.h"
+#include "biped_control/walking_pattern.h"
 
 using namespace biped_control;
 
@@ -21,7 +21,7 @@ void WalkPattern::integrate(float dt) {
     m_prev_time = m_curr_time;
     m_curr_time += dt;
 
-    std::cout << m_curr_time << std::endl;
+    std::cout << m_curr_time << " -> " << m_support_target << std::endl;
     
     m_lip.integrate(dt);
     
@@ -29,10 +29,10 @@ void WalkPattern::integrate(float dt) {
         StepParameters curr_step = m_steps[m_step_number++];
         
         m_foot_pos.x += curr_step.x_length;
-        m_foot_pos.y += pow(-1, m_step_number) * curr_step.y_length;
+        m_foot_pos.y -= pow(-1, m_step_number-1) * curr_step.y_length;
         
-        m_lip.setXPosition(curr_step.x_length/2.0f  - m_foot_pos.x);
-        m_lip.setYPosition((pow(-1, m_step_number) * curr_step.y_length) / 2.0f - m_foot_pos.y);
+        m_lip.setXOrigin(m_foot_pos.x);
+        m_lip.setYOrigin(m_foot_pos.y);
         
         m_support_target = m_curr_time + m_support_dt;
     }

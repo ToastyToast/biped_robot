@@ -39,8 +39,8 @@ set(${PROJECT_NAME}_LIBRARIES
 set(${PROJECT_NAME}_SRC
     include/biped_control/inverted_pendulum.h
     src/inverted_pendulum.cpp
-    include/biped_control/walk_pattern.h
-    src/walk_pattern.cpp)
+    include/biped_control/walking_pattern.h
+    src/walking_pattern.cpp)
 
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC})
@@ -50,3 +50,7 @@ target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
 add_executable(inverted_pendulum_test_node src/nodes/inverted_pendulum_test_node.cpp)
 add_dependencies(inverted_pendulum_test_node biped_msgs_generate_messages_cpp)
 target_link_libraries(inverted_pendulum_test_node ${PROJECT_NAME})
+
+add_executable(walking_pattern_test_node src/nodes/walking_pattern_test_node.cpp)
+add_dependencies(walking_pattern_test_node biped_msgs_generate_messages_cpp)
+target_link_libraries(walking_pattern_test_node ${PROJECT_NAME})
