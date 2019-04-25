@@ -10,17 +10,19 @@ LIP1D::LIP1D(float position, float velocity)
 {
 }
 
-void LIP1D::integrate(float t)
+void LIP1D::integrate(float dt)
 {
     float tau = getTau();
-    float csh = coshf(t/tau);
-    float snh = sinhf(t/tau);
+    float csh = coshf(dt/tau);
+    float snh = sinhf(dt/tau);
     
-    float m_new_position = m_position * csh + tau * m_velocity * snh;
-    float m_new_velocity = (m_position / tau) * snh + m_velocity * csh;
+    float pos = m_position - m_origin;
     
-    setPosition(m_new_position);
-    setVelocity(m_new_velocity);
+    float new_position = pos * csh + tau * m_velocity * snh + m_origin;
+    float new_velocity = (pos / tau) * snh + m_velocity * csh;
+    
+    setPosition(new_position);
+    setVelocity(new_velocity);
 }
 
 float LIP1D::getPosition() const
@@ -51,6 +53,14 @@ void LIP1D::setHeight(float height) {
     m_height = height;
 }
 
+float LIP1D::getOrigin() const {
+    return m_origin;
+}
+
+void LIP1D::setOrigin(float origin) {
+    m_origin = origin;
+}
+
 float LIP1D::getTau() {
     return sqrtf(m_height/m_g);
 }
@@ -60,9 +70,9 @@ LIP3D::LIP3D(float x_position, float y_position, float x_velocity, float y_veloc
 {
 }
 
-void LIP3D::integrate(float t) {
-    m_x_lip.integrate(t);
-    m_y_lip.integrate(t);
+void LIP3D::integrate(float dt) {
+    m_x_lip.integrate(dt);
+    m_y_lip.integrate(dt);
     m_z_position = calculateZFromPlaneConstraint();
 }
 
@@ -109,6 +119,22 @@ float LIP3D::getHeight() const {
 void LIP3D::setHeight(float height) {
     m_x_lip.setHeight(height);
     m_y_lip.setHeight(height);
+}
+
+float LIP3D::getXOrigin() const {
+    return m_x_lip.getOrigin();
+}
+
+void LIP3D::setXOrigin(float x_origin) {
+    m_x_lip.setOrigin(x_origin);
+}
+
+float LIP3D::getYOrigin() const {
+    return m_y_lip.getOrigin();
+}
+
+void LIP3D::setYOrigin(float y_origin) {
+    m_y_lip.setOrigin(y_origin);
 }
 
 void LIP3D::setPlaneConstraint(float x_slope, float y_slope, float zc) {

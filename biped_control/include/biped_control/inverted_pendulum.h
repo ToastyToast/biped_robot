@@ -10,7 +10,7 @@ public:
     LIP1D() = default;
     LIP1D(float position, float velocity);
     
-    void integrate(float t);
+    void integrate(float dt);
     
     float getPosition() const;
     void setPosition(float position);
@@ -21,10 +21,14 @@ public:
     float getHeight() const;
     void setHeight(float height);
     
+    float getOrigin() const;
+    void setOrigin(float origin);
+    
     float getTau();
 private:
     float m_position {0.0f};
     float m_velocity {0.0f};
+    float m_origin {0.0f};
     float m_g {9.81f};
     float m_height {1.0f};
 };
@@ -34,7 +38,7 @@ public:
     LIP3D() = default;
     LIP3D(float x_position, float y_position, float x_velocity=0.0f, float y_velocity=0.0f);
     
-    void integrate(float t);
+    void integrate(float dt);
     
     float getXPosition() const;
     void setXPosition(float x_position);
@@ -52,6 +56,12 @@ public:
     
     float getHeight() const;
     void setHeight(float height);
+    
+    float getXOrigin() const;
+    void setXOrigin(float x_origin);
+    
+    float getYOrigin() const;
+    void setYOrigin(float y_origin);
     
     void setPlaneConstraint(float x_slope, float y_slope, float zc);
     
